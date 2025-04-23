@@ -1,0 +1,122 @@
+@font-face {
+  font-family: cuphead;
+  src: url(../fonts/Marimpa.otf);
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  cursor: none;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  background-image: url(../images/cenario7.jpg);
+  background-size: cover;
+  background-position: center;
+  font-family: cuphead, "Comic Sans MS", cursive, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 60px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 800px;
+  width: 90vw;
+  box-shadow: 8px 8px 0 #212121;
+  border: 5px solid #212121;
+}
+
+.container h1 {
+  font-size: 64px;
+  color: #b3552f;
+  -webkit-text-stroke: 2px black;
+  margin-bottom: 30px;
+}
+
+.container p {
+  font-size: 24px;
+  color: #333;
+  font-family: cuphead, "Comic Sans MS", cursive;
+  margin-bottom: 50px;
+  line-height: 1.7;
+}
+
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 15px 30px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fefefe;
+  background-color: #b3552f;
+  border: 6px solid #212121;
+  border-radius: 10px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px #212121;
+  box-shadow: 4px 4px #212121;
+  text-decoration: none;
+  transition: all 0.1s ease;
+  font-family: cuphead, "Comic Sans MS", cursive;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: black;
+}
+
+.btn:hover {
+  background-color: #42c920;
+  box-shadow: 6px 6px #212121;
+  transform: translate(-2px, -2px);
+}
+
+.btn:active {
+  background-color: #d44a2a;
+  box-shadow: 2px 2px #212121;
+  transform: translate(2px, 2px);
+}
+
+#aceleria {
+  position: fixed;
+  width: 15vh;
+  height: auto;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  transition: transform 0.05s linear;
+  z-index: 10000;
+  filter: drop-shadow(0 0 5px #42c920);
+}
+
+.rastro {
+  position: fixed;
+  pointer-events: none;
+  width: 10px;
+  height: 10px;
+  background-color: #42c920;
+  border-radius: 40%;
+  z-index: 9999;
+  animation: fadeOut 0.6s linear forwards;
+  box-shadow: 0 0 8px #42c920;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}

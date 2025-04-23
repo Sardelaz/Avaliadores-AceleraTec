@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - AceleraTec</title>
+    <link rel="stylesheet" href="assets/css/registro.css">
+</head>
+<body>
+
+    <a href="index.html" class="back-arrow">
+        <img src="assets/images/seta.png" alt="Voltar">
+    </a>
+
+    <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
+
+    <div class="register-container">
+        <form id="registerForm">
+            <h1>Registrar AceleraTec</h1>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required placeholder="Digite seu email">
+
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" required placeholder="Digite sua senha">
+
+            <button type="submit">Registrar</button>
+            <div id="mensagemErro" class="erro"></div>
+
+            <p>Já tem uma conta? <a href="login.html">Login</a></p>
+        </form>
+    </div>
+
+    <script type="module" src="js/registro.js"></script>
+    <script src="js/mouse.js"></script>
+</body>
+</html>

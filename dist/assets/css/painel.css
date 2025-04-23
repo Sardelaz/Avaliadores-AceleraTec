@@ -1,0 +1,329 @@
+@font-face {
+  font-family: cuphead;
+  src: url(../fonts/Marimpa.otf);
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  cursor: none;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  background-image: url(../images/cenario1.jpg);
+  background-size: cover;
+  background-position: center;
+  font-family: cuphead, "Comic Sans MS", cursive, sans-serif;
+  overflow-x: hidden;
+  /* Desabilita o cursor padrão para usar o cursor customizado */
+  cursor: none;
+}
+
+/* Fantasma e rastro (Usado pelo script mouse.js) */
+#aceleria {
+  position: fixed;
+  width: 15vh;
+  height: auto;
+  left: 0;
+  top: 0;
+  pointer-events: none; /* Garante que o cursor customizado não interfira com cliques */
+  transition: transform 0.05s linear;
+  z-index: 10000;
+  filter: drop-shadow(0 0 5px #42c920);
+}
+
+.rastro {
+  position: fixed;
+  pointer-events: none; 
+  width: 10px;
+  height: 10px;
+  background-color: #42c920;
+  border-radius: 40%;
+  z-index: 9999;
+  animation: fadeOut 0.6s linear forwards;
+  box-shadow: 0 0 8px #42c920;
+}
+
+@keyframes fadeOut {
+  from {
+      opacity: 0.8;
+      transform: scale(1);
+  }
+  to {
+      opacity: 0;
+      transform: scale(0.2);
+  }
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Botão sair */
+.btn-logout {
+  padding: 20px 20px;
+  background-color: #b3552f;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 2px solid #f4a261;
+  transition: all 0.3s ease;
+  display: flex;
+  height: 80px;
+  align-items: center;
+  box-shadow: 6px 6px 0 #212121;
+  border: 5px solid #212121;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-logout:hover {
+  background-color: #f4a261;
+  color: #333;
+  transform: scale(1.1);
+}
+
+/* Estrutura principal */
+.app-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  border: 5px solid #212121;
+  box-shadow: 8px 8px 0 #212121;
+}
+
+/* Cabeçalho do App */
+.app-header {
+  display: flex;
+  justify-content: space-between; /* Alinha o logo à esquerda e o botão à direita */
+  align-items: center;
+  background-color: #b3552f;
+  border: 5px solid #212121;
+  border-radius: 15px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 6px 6px 0 #212121;
+  width: 90%;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinha o logo à esquerda */
+  width: 100%; /* Flexível, sem forçar o espaço */
+}
+
+.header-logo h1 {
+  font-size: 42px;
+  color: #fefefe;
+  -webkit-text-stroke: 2px black;
+  text-shadow: 3px 3px 0 #212121;
+  letter-spacing: 1px;
+  text-align: left;
+  margin-right: 30px; /* Espaço à direita do título */
+}
+
+/* Título da seção de conteúdo */
+.content-header {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.content-header h2 {
+  font-size: 40px;
+  color: #b3552f;
+  -webkit-text-stroke: 1.5px black;
+  text-shadow: 3px 3px 0 #212121;
+  display: inline-block;
+  padding: 0.5rem 2rem;
+  background-color: rgba(255, 248, 240, 0.8);
+  border: 4px solid #212121;
+  border-radius: 15px;
+  box-shadow: 5px 5px 0 #212121;
+}
+
+/* Container do filtro */
+.filter-container {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  background-color: rgba(255, 248, 240, 0.9);
+  padding: 1.5rem;
+  border: 4px solid #212121;
+  border-radius: 15px;
+  box-shadow: 5px 5px 0 #212121;
+}
+
+.filter-container label {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 22px;
+  color: #212121;
+  font-weight: bold;
+}
+
+.filter-container select {
+  font-family: cuphead, "Comic Sans MS", cursive;
+  font-size: 18px;
+  padding: 12px 20px;
+  border: 3px solid #212121;
+  border-radius: 8px;
+  background-color: #fff8f0;
+  color: #212121;
+  box-shadow: 4px 4px 0 #212121;
+  width: 80%;
+  max-width: 500px;
+  /* Esconde a seta padrão do select */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Adiciona uma seta customizada via SVG */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23212121' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2rem;
+  padding-right: 3rem; /* Adiciona padding para a seta customizada */
+  cursor: pointer; /* Mantido cursor default para selects */
+}
+
+.filter-container select:hover {
+  background-color: rgba(66, 201, 32, 0.4);
+}
+
+/* Mensagem de carregando */
+.loading {
+  font-size: 28px;
+  text-align: center;
+  font-family: cuphead, "Comic Sans MS", cursive;
+  margin: 3rem 0;
+  color: #212121;
+  -webkit-text-stroke: 1px black;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+/* Container dos projetos em Grid */
+.projetos-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Cartões dos projetos (Adicionados via JS) */
+.projeto-item {
+  background-color: #fff8f0;
+  border: 5px solid #212121;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 6px 6px 0 #212121;
+  font-family: cuphead, "Comic Sans MS", cursive;
+  transition: transform 0.2s ease;
+}
+
+.projeto-item:hover {
+  transform: translateY(-8px) rotate(1deg);
+  background-color: rgba(66, 201, 32, 0.2);
+  box-shadow: 8px 8px 0 #212121;
+}
+
+.projeto-item h3 {
+  font-size: 40px;
+  color: #b3552f;
+  -webkit-text-stroke: 1px black;
+  margin-bottom: 1rem;
+  text-align: center;
+  border-bottom: 3px solid #212121;
+  padding-bottom: 0.5rem;
+}
+
+.projeto-item p {
+  color: #212121;
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.projeto-item a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 10px 15px;
+  background-color: #b3552f;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  border: 3px solid #212121;
+  box-shadow: 3px 3px 0 #212121;
+  transition: transform 0.1s ease;
+  letter-spacing: 3px;
+  font-size: 16px;
+  /*cursor: pointer; /* Mantido cursor default para links */
+}
+
+.projeto-item a:hover {
+  transform: scale(1.05);
+  background-color: #da6531;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .content-header h2 {
+      font-size: 24px;
+  }
+
+  .filter-container label,
+  .filter-container select {
+      font-size: 16px;
+  }
+
+  .projeto-item h3 {
+      font-size: 18px;
+  }
+
+  .projeto-item p {
+      font-size: 14px;
+  }
+
+  .btn-logout {
+      /* Removido: margin-left: 20px; - Inadequado em flex-direction column com align-self: center */
+      padding: 8px 15px;
+      font-size: 14px;
+  }
+
+  /* Ajusta o cabeçalho em telas menores */
+  .app-header {
+      flex-direction: column; /* Coloca itens em coluna */
+      align-items: flex-start; /* Alinha itens à esquerda na coluna */
+      padding: 1rem;
+  }
+
+  .header-logo {
+      width: 100%; /* Ocupa toda a largura */
+      margin-bottom: 1rem; /* Adiciona espaço abaixo do logo */
+      justify-content: center; /* Centraliza o logo/título na coluna */
+  }
+
+  .header-logo h1 {
+      font-size: 32px; /* Diminui o tamanho do título */
+      text-align: center; /* Centraliza o título na coluna */
+      margin-right: 0; /* Remove a margem direita do h1 */
+  }
+
+  .btn-logout {
+      width: auto; /* Deixa o botão se ajustar ao conteúdo */
+      align-self: center; /* Centraliza o botão na coluna */
+      /* Removido: margin-left: 0; - Já foi removido na regra principal e não necessário aqui */
+  }
+}

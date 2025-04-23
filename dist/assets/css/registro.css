@@ -1,0 +1,205 @@
+@font-face {
+  font-family: cuphead;
+  src: url(../fonts/Marimpa.otf);
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  cursor: none;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  background-image: url(../images/cenario4.jpg);
+  background-size: cover;
+  background-position: center;
+  font-family: cuphead, "Comic Sans MS", cursive, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: none;
+}
+
+.register-container {
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 60px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 500px;
+  width: 90vw;
+  box-shadow: 8px 8px 0 #212121;
+  border: 5px solid #212121;
+}
+
+.register-container h1 {
+  font-size: 42px;
+  color: #b3552f;
+  -webkit-text-stroke: 2px black;
+  margin-bottom: 30px;
+}
+
+.register-container label {
+  display: block;
+  font-size: 18px;
+  color: #333;
+  margin: 20px 0 10px;
+  text-align: left;
+  font-family: cuphead, "Comic Sans MS", cursive; /* Alterado para usar a fonte 'cuphead' */
+}
+
+
+.register-container input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 3px solid #212121;
+  border-radius: 8px;
+  background-color: #fff8f0;
+  font-family: cuphead, "Comic Sans MS", cursive;
+  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.register-container input:hover {
+  background-color: rgba(66, 201, 32, 0.4);
+}
+
+
+.register-container input:focus {
+  outline: none;
+  border-color: #b3552f;
+  box-shadow: 0 0 5px #b3552f;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fefefe;
+  background-color: #b3552f;
+  border: 6px solid #212121;
+  border-radius: 10px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px #212121;
+  box-shadow: 4px 4px #212121;
+  text-decoration: none;
+  transition: all 0.1s ease;
+  font-family: cuphead, "Comic Sans MS", cursive;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: black;
+  width: 100%;
+  margin-top: 30px;
+}
+
+button:hover {
+  background-color: #42c920;
+  box-shadow: 6px 6px #212121;
+  transform: translate(-2px, -2px);
+}
+
+button:active {
+  background-color: #d44a2a;
+  box-shadow: 2px 2px #212121;
+  transform: translate(2px, 2px);
+}
+
+p {
+  font-size: 20px;
+  color: #212121;
+  margin-top: 20px;
+}
+
+a {
+  font-size: 20px;
+  color: #b3552f;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.btn-voltar {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  font-size: 80px;
+  color: #d44a2a;
+  text-decoration: none;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  text-shadow: 
+    3px 3px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000;
+  transform: rotate(-5deg);
+  z-index: 9999;
+  transition: transform 0.1s ease, color 0.1s ease;
+  cursor: pointer;
+}
+
+.btn-voltar:hover {
+  color: #42c920;
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.btn-voltar:active {
+  transform: scale(0.95) rotate(-5deg);
+}
+
+.back-arrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+}
+
+.back-arrow img {
+  height: 55px;
+  width: auto;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: sepia(1) saturate(5) hue-rotate(335deg) brightness(0.85)
+}
+
+.back-arrow img:hover {
+  transform: scale(1.05) rotate(-3deg);
+  filter: sepia(1) saturate(6) hue-rotate(335deg) brightness(1.05) drop-shadow(0 0 6px #42c920);
+}
+
+/* Fantasma e rastro */
+#aceleria {
+  position: fixed;
+  width: 15vh;
+  height: auto;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  transition: transform 0.05s linear;
+  z-index: 10000;
+  filter: drop-shadow(0 0 5px #42c920);
+}
+
+.rastro {
+  position: fixed;
+  pointer-events: none;
+  width: 10px;
+  height: 10px;
+  background-color: #42c920;
+  border-radius: 40%;
+  z-index: 9999;
+  animation: fadeOut 0.6s linear forwards;
+  box-shadow: 0 0 8px #42c920;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}

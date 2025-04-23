@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Projetos Cadastrados - AceleraTec 2025</title>
+    <link rel="stylesheet" href="assets/css/painel.css" />
+</head>
+<body>
+
+    <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
+
+    <div class="app-container">
+        <div class="header">
+            <header class="app-header">
+                <div class="header-logo">
+                    <h1>Projetos AceleraTec</h1>
+                </div>
+            </header>
+            
+            <a href="index.html" class="btn-logout">Sair</a>
+        </div>
+     
+
+        <main class="app-content">
+            <div class="content-header">
+                <h2>Projetos Cadastrados - AceleraTec 2025</h2>
+            </div>
+
+            <div class="filter-container">
+                <label for="filtroCurso">Filtrar por Curso e Ano:</label>
+                <select id="filtroCurso">
+                    <option value="">Todos</option>
+                    <option value="Comércio Exterior - 1º Ano">Comércio Exterior - 1º Ano</option>
+                    <option value="Comércio Exterior - 2º Ano">Comércio Exterior - 2º Ano</option>
+                    <option value="Comércio Exterior - 3º Ano">Comércio Exterior - 3º Ano</option>
+
+                    <option value="Informática para Internet - 1º Ano">Informática para Internet - 1º Ano</option>
+                    <option value="Informática para Internet - 2º Ano">Informática para Internet - 2º Ano</option>
+                    <option value="Informática para Internet - 3º Ano">Informática para Internet - 3º Ano</option>
+
+                    <option value="Marketing - 1º Ano">Marketing - 1º Ano</option>
+                    <option value="Marketing - 2º Ano">Marketing - 2º Ano</option>
+                    <option value="Marketing - 3º Ano">Marketing - 3º Ano</option>
+
+                    <option value="Recursos Humanos - 1º Ano">Recursos Humanos - 1º Ano</option>
+                    <option value="Recursos Humanos - 2º Ano">Recursos Humanos - 2º Ano</option>
+                    <option value="Recursos Humanos - 3º Ano">Recursos Humanos - 3º Ano</option>
+
+                    <option value="Serviços Jurídicos - 1º Ano">Serviços Jurídicos - 1º Ano</option>
+                    <option value="Serviços Jurídicos - 2º Ano">Serviços Jurídicos - 2º Ano</option>
+                    <option value="Serviços Jurídicos - 3º Ano">Serviços Jurídicos - 3º Ano</option>
+
+                    <option value="Desenvolvimento de Sistemas - 1º Ano">Desenvolvimento de Sistemas - 1º Ano</option>
+                    <option value="Desenvolvimento de Sistemas - 2º Ano">Desenvolvimento de Sistemas - 2º Ano</option>
+                    <option value="Desenvolvimento de Sistemas - 3º Ano">Desenvolvimento de Sistemas - 3º Ano</option>
+
+                    <option value="Segurança do Trabalho - 1º Ano">Segurança do Trabalho - 1º Ano</option>
+                    <option value="Segurança do Trabalho - 2º Ano">Segurança do Trabalho - 2º Ano</option>
+                    <option value="Segurança do Trabalho - 3º Ano">Segurança do Trabalho - 3º Ano</option>
+                </select>
+            </div>
+
+            <div id="projetos-container" class="projetos-container">
+                <!-- As prateleiras com os cards dos projetos serão inseridas aqui via JavaScript -->
+                <p class="loading">Carregando projetos...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase + Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+    <script src="js/mouse.js"></script>
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/projetos.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - AceleraTec</title>
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body>
+
+    <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
+
+    <a href="index.html" class="back-arrow">
+        <img src="assets/images/seta.png" alt="Voltar">
+    </a>
+
+    <div class="login-container">
+        <form id="loginForm">
+            <h1>Login - AceleraTec</h1>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required placeholder="Digite seu email">
+
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" required placeholder="Digite sua senha">
+
+            <button type="submit">Entrar</button>
+            <div id="mensagemErro" class="erro"></div>
+
+            <p>Não tem uma conta? <a href="registro.html">Registre-se</a></p>
+        </form>
+    </div>
+
+    <script type="module" src="js/login.js"></script>
+    <script src="js/mouse.js"></script>
+</body>
+</html>
