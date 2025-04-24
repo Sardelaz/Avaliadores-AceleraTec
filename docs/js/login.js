@@ -23,14 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Proteção de rota: Redireciona para login se o usuário NÃO estiver logado
+    // Proteção de rota + redirecionamento se já estiver logado
     onAuthStateChanged(auth, (user) => {
-        console.log("Pathname:", window.location.pathname); // Para depuração
-        console.log("User state:", user); // Para depuração
-        if (!user) {
+        const isLoginPage = window.location.pathname.includes("login.html");
+
+        if (!user && !isLoginPage) {
             console.log("Usuário não está logado, redirecionando para login.");
             window.location.href = "login.html";
         }
-    });
 
+        if (user && isLoginPage) {
+            console.log("Usuário já logado, redirecionando para projetos.");
+            window.location.href = "projetos.html";
+        }
+    });
 });
