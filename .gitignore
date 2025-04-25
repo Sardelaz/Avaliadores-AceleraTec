@@ -5,7 +5,7 @@ node_modules/
 .env
 
 # Pasta de build
-/dist/firebase
+/dist/js/firebase
 
 # Arquivos de sistema
 .DS_Store
