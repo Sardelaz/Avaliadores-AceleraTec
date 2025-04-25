@@ -11,8 +11,9 @@ window.addEventListener('mousemove', (event) => {
   const offsetX = imagemPrincipal.offsetWidth / 2;
   const offsetY = imagemPrincipal.offsetHeight / 2;
 
-  // Ajuste para o fantasma ficar mais perto do mouse
-  imagemPrincipal.style.transform = `translate(${x - offsetX + 10}px, ${y - offsetY}px)`;
+  // Ajuste para o fantasma ficar mais perto do mouse com suavização
+  imagemPrincipal.style.transition = 'transform 0.1s ease-out'; // Suaviza a movimentação
+  imagemPrincipal.style.transform = `translate(${x - offsetX}px, ${y - offsetY}px)`;
 
   if (podeCriarRastro) {
     criarElementoRastro(x, y);
@@ -38,3 +39,4 @@ function criarElementoRastro(x, y) {
     }
   }, 800);
 }
+  

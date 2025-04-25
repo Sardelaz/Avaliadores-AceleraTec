@@ -5,25 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Proffys AceleraTec</title>
   <link rel="stylesheet" href="assets/css/index.css" />
+  <link rel="stylesheet" href="assets/css/acessibilidade.css">
 </head>
 <body>
 
   <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
-   <!-- mousea -->
 
-  <div class="container">
-    <h1>Área dos Avaliadores</h1>
-    <p>
+  <div class="container speak">
+    <h1 class="speak">Área dos Avaliadores</h1>
+    <p class="speak">
       Bem-vindo ao painel do <strong>AceleraTec</strong>! <br />
       Aqui, professores e avaliadores podem acessar os projetos enviados pelos alunos e conferir todos os detalhes cadastrados.
     </p>
     <div class="buttons">
-      <a href="login.html" class="btn btn-primary">Já tenho uma conta</a>
-      <a href="registro.html" class="btn btn-secondary">Criar conta</a>
+      <a href="login.html" class="btn btn-primary speak">Já tenho uma conta</a>
+      <a href="registro.html" class="btn btn-secondary speak">Criar conta</a>
+    </div>
+  </div>
+
+  <button id="openAccessibility" aria-label="Abrir menu de acessibilidade" title="Acessibilidade">
+    ⚙️
+  </button>
+  
+  <!-- Modal de acessibilidade -->
+  <div id="accessibilityModal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeModal" title="Fechar">❌</span>
+      <h2 style="font-family: 'Marimpa', cursive;">⚙️ Acessibilidade</h2>
+  
+      <button onclick="toggleTalkTouch()" title="TalkTouch - Leitura em voz alta">🎙️ TalkTouch</button>
+  
+      <!-- Novo elemento para mostrar o status do TalkTouch -->
+      <p id="talkTouchStatus">TalkTouch: Desativado</p>
+  
+      <div style="margin: 1em 0;">
+        🌐 <label for="languageSelector">Idioma</label><br/>
+        <select id="languageSelector" onchange="changeLanguage()">
+          <option value="pt">Português</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+  
+      <div style="margin: 1em 0;">
+        🔍 Aumentar fonte<button onclick="increaseFont()" title="Aumentar fonte">A+</button>
+        🔎 Diminuir fonte <button onclick="decreaseFont()" title="Diminuir fonte">A-</button>
+      </div>
+  
+      <button onclick="toggleContrast()" title="Ativar/Desativar alto contraste">🌗 Contraste</button>
     </div>
   </div>
 
   <script src="js/mouse.js"></script>
+  <script src="js/acessibilidade.js"></script>
 
 </body>
 </html>

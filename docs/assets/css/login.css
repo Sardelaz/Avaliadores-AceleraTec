@@ -1,8 +1,10 @@
+/* Definindo a fonte 'Marimpa' para o estilo Cuphead */
 @font-face {
   font-family: cuphead;
   src: url(../fonts/Marimpa.otf);
 }
 
+/* Estilo geral */
 * {
   margin: 0;
   box-sizing: border-box;
@@ -23,6 +25,7 @@ body {
   cursor: none;
 }
 
+/* Estilo do formulário de login */
 .login-container {
   background-color: rgba(255, 255, 255, 0.85);
   padding: 60px;
@@ -119,6 +122,7 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Estilo do botão de voltar */
 .back-arrow {
   position: absolute;
   top: 20px;
@@ -138,7 +142,7 @@ a:hover {
   filter: sepia(1) saturate(6) hue-rotate(335deg) brightness(1.05) drop-shadow(0 0 6px #42c920);
 }
 
-/* Fantasma e rastro */
+/* Estilo do fantasma e rastro */
 #aceleria {
   position: fixed;
   width: 15vh;
@@ -165,135 +169,135 @@ a:hover {
 
 @keyframes fadeOut {
   from {
-    opacity: 0.8;
-    transform: scale(1);
+      opacity: 0.8;
+      transform: scale(1);
   }
   to {
-    opacity: 0;
-    transform: scale(0.2);
+      opacity: 0;
+      transform: scale(0.2);
   }
 }
 
-/* Responsividade para telas pequenas */
+/* Estilo de responsividade */
 @media (max-width: 1024px) {
   .login-container {
-    padding: 50px;
-    width: 80vw;
+      padding: 50px;
+      width: 80vw;
   }
 
   .login-container h1 {
-    font-size: 36px;
+      font-size: 36px;
   }
 
   .login-container label {
-    font-size: 16px;
+      font-size: 16px;
   }
 
   .login-container input,
   button {
-    font-size: 18px;
-    padding: 14px;
+      font-size: 18px;
+      padding: 14px;
   }
 
   .btn-voltar {
-    font-size: 60px;
+      font-size: 60px;
   }
 
   .back-arrow img {
-    height: 50px;
+      height: 50px;
   }
 }
 
 @media (max-width: 768px) {
   .login-container {
-    padding: 40px;
-    width: 90vw;
+      padding: 40px;
+      width: 90vw;
   }
 
   .login-container h1 {
-    font-size: 32px;
+      font-size: 32px;
   }
 
   .login-container label {
-    font-size: 14px;
+      font-size: 14px;
   }
 
   .login-container input,
   button {
-    font-size: 16px;
-    padding: 12px;
+      font-size: 16px;
+      padding: 12px;
   }
 
   .btn-voltar {
-    font-size: 50px;
+      font-size: 50px;
   }
 
   .back-arrow img {
-    height: 45px;
+      height: 45px;
   }
 }
 
 @media (max-width: 480px) {
   .login-container {
-    padding: 30px;
-    width: 95vw;
+      padding: 30px;
+      width: 95vw;
   }
 
   .login-container h1 {
-    font-size: 28px;
+      font-size: 28px;
   }
 
   .login-container label {
-    font-size: 14px;
+      font-size: 14px;
   }
 
   .login-container input,
   button {
-    font-size: 14px;
-    padding: 10px;
+      font-size: 14px;
+      padding: 10px;
   }
 
   .btn-voltar {
-    font-size: 40px;
+      font-size: 40px;
   }
 
   .back-arrow img {
-    height: 40px;
+      height: 40px;
   }
 }
 
-/* Responsividade para telas em modo paisagem (landscape) */
+/* Estilo para telas em modo paisagem */
 @media (orientation: landscape) {
   body {
-    flex-direction: row;
-    justify-content: flex-start;
+      flex-direction: row;
+      justify-content: flex-start;
   }
 
   .login-container {
-    padding: 70px 50px;
-    width: 60vw;
-    margin: 0 auto;
+      padding: 70px 50px;
+      width: 60vw;
+      margin: 0 auto;
   }
 
   .login-container h1 {
-    font-size: 48px;
+      font-size: 48px;
   }
 
   .login-container label {
-    font-size: 18px;
+      font-size: 18px;
   }
 
   .login-container input,
   button {
-    font-size: 18px;
-    padding: 16px;
+      font-size: 18px;
+      padding: 16px;
   }
 
   .btn-voltar {
-    font-size: 80px;
+      font-size: 80px;
   }
 
   .back-arrow img {
-    height: 55px;
+      height: 55px;
   }
 }
