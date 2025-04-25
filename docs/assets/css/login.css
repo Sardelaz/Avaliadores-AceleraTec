@@ -62,7 +62,7 @@ body {
 }
 
 .login-container input:hover {
-  background-color: rgba(66, 201, 32, 0.4); /* verde opaco suave */
+  background-color: rgba(66, 201, 32, 0.4);
 }
 
 .login-container input:focus {
@@ -130,7 +130,7 @@ a:hover {
   height: 55px;
   width: auto;
   transition: transform 0.2s ease, filter 0.2s ease;
-  filter: sepia(1) saturate(5) hue-rotate(335deg) brightness(0.85)
+  filter: sepia(1) saturate(5) hue-rotate(335deg) brightness(0.85);
 }
 
 .back-arrow img:hover {
@@ -171,5 +171,129 @@ a:hover {
   to {
     opacity: 0;
     transform: scale(0.2);
+  }
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 1024px) {
+  .login-container {
+    padding: 50px;
+    width: 80vw;
+  }
+
+  .login-container h1 {
+    font-size: 36px;
+  }
+
+  .login-container label {
+    font-size: 16px;
+  }
+
+  .login-container input,
+  button {
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  .btn-voltar {
+    font-size: 60px;
+  }
+
+  .back-arrow img {
+    height: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 40px;
+    width: 90vw;
+  }
+
+  .login-container h1 {
+    font-size: 32px;
+  }
+
+  .login-container label {
+    font-size: 14px;
+  }
+
+  .login-container input,
+  button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .btn-voltar {
+    font-size: 50px;
+  }
+
+  .back-arrow img {
+    height: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 30px;
+    width: 95vw;
+  }
+
+  .login-container h1 {
+    font-size: 28px;
+  }
+
+  .login-container label {
+    font-size: 14px;
+  }
+
+  .login-container input,
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn-voltar {
+    font-size: 40px;
+  }
+
+  .back-arrow img {
+    height: 40px;
+  }
+}
+
+/* Responsividade para telas em modo paisagem (landscape) */
+@media (orientation: landscape) {
+  body {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .login-container {
+    padding: 70px 50px;
+    width: 60vw;
+    margin: 0 auto;
+  }
+
+  .login-container h1 {
+    font-size: 48px;
+  }
+
+  .login-container label {
+    font-size: 18px;
+  }
+
+  .login-container input,
+  button {
+    font-size: 18px;
+    padding: 16px;
+  }
+
+  .btn-voltar {
+    font-size: 80px;
+  }
+
+  .back-arrow img {
+    height: 55px;
   }
 }

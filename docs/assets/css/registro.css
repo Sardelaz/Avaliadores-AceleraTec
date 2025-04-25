@@ -25,36 +25,35 @@ body {
 
 .register-container {
   background-color: rgba(255, 255, 255, 0.85);
-  padding: 60px;
+  padding: 80px 60px; /* Aumentado o padding para mais espaço interno */
   border-radius: 20px;
   text-align: center;
-  max-width: 500px;
-  width: 90vw;
+  max-width: 700px; /* Aumentando a largura máxima */
+  width: 80vw; /* Alterado para 80% da largura da tela */
   box-shadow: 8px 8px 0 #212121;
   border: 5px solid #212121;
 }
 
 .register-container h1 {
-  font-size: 42px;
+  font-size: 48px; /* Aumentado para melhorar a visibilidade */
   color: #b3552f;
   -webkit-text-stroke: 2px black;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .register-container label {
   display: block;
-  font-size: 18px;
+  font-size: 20px; /* Aumentando o tamanho da fonte */
   color: #333;
   margin: 20px 0 10px;
   text-align: left;
-  font-family: cuphead, "Comic Sans MS", cursive; /* Alterado para usar a fonte 'cuphead' */
+  font-family: cuphead, "Comic Sans MS", cursive;
 }
-
 
 .register-container input {
   width: 100%;
-  padding: 12px;
-  font-size: 16px;
+  padding: 14px;
+  font-size: 18px; /* Aumentando o tamanho da fonte */
   border: 3px solid #212121;
   border-radius: 8px;
   background-color: #fff8f0;
@@ -66,7 +65,6 @@ body {
   background-color: rgba(66, 201, 32, 0.4);
 }
 
-
 .register-container input:focus {
   outline: none;
   border-color: #b3552f;
@@ -74,8 +72,8 @@ body {
 }
 
 button {
-  padding: 15px 30px;
-  font-size: 20px;
+  padding: 18px 35px; /* Aumentando o padding */
+  font-size: 22px; /* Aumentando o tamanho da fonte */
   font-weight: bold;
   color: #fefefe;
   background-color: #b3552f;
@@ -90,7 +88,7 @@ button {
   -webkit-text-stroke-width: 0.5px;
   -webkit-text-stroke-color: black;
   width: 100%;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 button:hover {
@@ -106,13 +104,13 @@ button:active {
 }
 
 p {
-  font-size: 20px;
+  font-size: 20px; /* Aumentando o tamanho da fonte */
   color: #212121;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 a {
-  font-size: 20px;
+  font-size: 20px; /* Aumentando o tamanho da fonte */
   color: #b3552f;
   text-decoration: none;
 }
@@ -201,5 +199,124 @@ a:hover {
   to {
     opacity: 0;
     transform: scale(0.2);
+  }
+}
+
+/* Responsividade - Adaptação para telas pequenas */
+@media (max-width: 1024px) {
+  .register-container {
+    padding: 60px 40px;
+    width: 80%;
+  }
+
+  .register-container h1 {
+    font-size: 42px;
+  }
+
+  .register-container label,
+  .register-container input,
+  button {
+    font-size: 18px;
+  }
+
+  .btn-voltar {
+    font-size: 70px;
+  }
+
+  .back-arrow img {
+    height: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-container {
+    padding: 50px 25px;
+    width: 90%;
+  }
+
+  .register-container h1 {
+    font-size: 36px;
+  }
+
+  .register-container label {
+    font-size: 16px;
+  }
+
+  .register-container input,
+  button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .btn-voltar {
+    font-size: 60px;
+  }
+
+  .back-arrow img {
+    height: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 30px 15px;
+  }
+
+  .register-container h1 {
+    font-size: 32px;
+  }
+
+  .register-container label {
+    font-size: 16px;
+  }
+
+  .register-container input,
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn-voltar {
+    font-size: 50px;
+  }
+
+  .back-arrow img {
+    height: 40px;
+  }
+}
+
+/* Responsividade para telas em modo paisagem (landscape) */
+@media (orientation: landscape) {
+  body {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .register-container {
+    padding: 70px 50px;
+    width: 60vw;
+    margin: 0 auto;
+  }
+
+  .register-container h1 {
+    font-size: 56px;
+  }
+
+  .register-container label {
+    font-size: 20px;
+  }
+
+  .register-container input,
+  button {
+    font-size: 20px;
+    padding: 18px;
+  }
+
+  .btn-voltar {
+    font-size: 90px;
+  }
+
+  .back-arrow img {
+    height: 60px;
   }
 }

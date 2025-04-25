@@ -17,7 +17,6 @@ body {
   background-position: center;
   font-family: cuphead, "Comic Sans MS", cursive, sans-serif;
   overflow-x: hidden;
-  /* Desabilita o cursor padrão para usar o cursor customizado */
   cursor: none;
 }
 
@@ -28,7 +27,7 @@ body {
   height: auto;
   left: 0;
   top: 0;
-  pointer-events: none; /* Garante que o cursor customizado não interfira com cliques */
+  pointer-events: none; 
   transition: transform 0.05s linear;
   z-index: 10000;
   filter: drop-shadow(0 0 5px #42c920);
@@ -101,7 +100,7 @@ body {
 /* Cabeçalho do App */
 .app-header {
   display: flex;
-  justify-content: space-between; /* Alinha o logo à esquerda e o botão à direita */
+  justify-content: space-between; 
   align-items: center;
   background-color: #b3552f;
   border: 5px solid #212121;
@@ -115,8 +114,8 @@ body {
 .header-logo {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Alinha o logo à esquerda */
-  width: 100%; /* Flexível, sem forçar o espaço */
+  justify-content: flex-start; 
+  width: 100%; 
 }
 
 .header-logo h1 {
@@ -187,8 +186,8 @@ body {
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1.2rem;
-  padding-right: 3rem; /* Adiciona padding para a seta customizada */
-  cursor: pointer; /* Mantido cursor default para selects */
+  padding-right: 3rem; 
+  cursor: pointer; 
 }
 
 .filter-container select:hover {
@@ -269,7 +268,6 @@ body {
   transition: transform 0.1s ease;
   letter-spacing: 3px;
   font-size: 16px;
-  /*cursor: pointer; /* Mantido cursor default para links */
 }
 
 .projeto-item a:hover {
@@ -278,52 +276,64 @@ body {
 }
 
 /* Responsivo */
-@media (max-width: 600px) {
-  .content-header h2 {
-      font-size: 24px;
+@media (max-width: 650px) {
+
+  
+
+  .header{
+    flex-direction: column;
   }
+  .btn-logout{
+    width: 90% ;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .content-header h2 {
+     font-size: 24px;
+  } 
 
   .filter-container label,
   .filter-container select {
-      font-size: 16px;
+    font-size: 16px;
   }
 
   .projeto-item h3 {
-      font-size: 18px;
+    font-size: 18px;
   }
 
   .projeto-item p {
-      font-size: 14px;
+    font-size: 14px;
   }
 
   .btn-logout {
-      /* Removido: margin-left: 20px; - Inadequado em flex-direction column com align-self: center */
       padding: 8px 15px;
       font-size: 14px;
   }
 
   /* Ajusta o cabeçalho em telas menores */
   .app-header {
-      flex-direction: column; /* Coloca itens em coluna */
-      align-items: flex-start; /* Alinha itens à esquerda na coluna */
+      flex-direction: column;
+      align-items: flex-start; 
       padding: 1rem;
   }
 
   .header-logo {
-      width: 100%; /* Ocupa toda a largura */
-      margin-bottom: 1rem; /* Adiciona espaço abaixo do logo */
-      justify-content: center; /* Centraliza o logo/título na coluna */
-  }
+      width: 100%;
+      margin-bottom: 1rem;
+      justify-content: center; 
 
   .header-logo h1 {
-      font-size: 32px; /* Diminui o tamanho do título */
-      text-align: center; /* Centraliza o título na coluna */
-      margin-right: 0; /* Remove a margem direita do h1 */
+      font-size: 32px; 
+      text-align: center; 
+      margin-right: 0; 
   }
 
   .btn-logout {
-      width: auto; /* Deixa o botão se ajustar ao conteúdo */
-      align-self: center; /* Centraliza o botão na coluna */
-      /* Removido: margin-left: 0; - Já foi removido na regra principal e não necessário aqui */
+      width: auto; 
+      align-self: center; 
   }
+
+}
 }
