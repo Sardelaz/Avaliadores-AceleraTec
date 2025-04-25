@@ -62,7 +62,7 @@ function changeLanguage() {
       desc: "Welcome to the AceleraTec panel! Here, teachers and evaluators can access the projects submitted by students and check all registered details.",
       login: "I already have an account",
       register: "Create account"
-    }
+    },
   };
 
   const t = translations[lang];
