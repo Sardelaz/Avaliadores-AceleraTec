@@ -38,32 +38,29 @@
 
     <div id="accessibilityModal" class="modal hidden">
         <div class="modal-content">
-            <span id="closeModal" title="Fechar">❌</span>
-            ⚙️
-            <button id="toggleTalkTouchButton" title="TalkTouch - Leitura em voz alta">🎙️ TalkTouch</button>
+            <span id="closeModal" title="Fechar" class="speak">❌</span>
 
-            <p id="talkTouchStatus">TalkTouch: Desativado</p>
+            <div style="margin-top: 1em;">
+                ⚙️
+                <button id="toggleTalkTouchButton" title="TalkTouch - Leitura em voz alta" class="speak">🎙️
+                    TalkTouch</button>
+                <p id="talkTouchStatus" class="speak">TalkTouch: Desativado</p>
+            </div>
 
             <div style="margin: 1em 0;">
-                🌐 <label for="languageSelector">Idioma</label><br />
+                🌐 <label for="languageSelector" class="speak">Idioma</label><br />
                 <select id="languageSelector" onchange="changeLanguage()">
-                    <option value="pt">Português</option>
-                    <option value="en">English</option>
-                    <option value="es">Espanhol</option>
+                    <option value="pt" class="speak">Português</option>
+                    <option value="en" class="speak">English</option>
+                    <option value="es" class="speak">Espanhol</option>
                 </select>
             </div>
 
-            <div style="margin: 1em 0;">
-                <span id="increaseFontText">🔍 Aumentar fonte</span><button onclick="increaseFont()"
-                    title="Aumentar fonte">A+</button>
-                <span id="decreaseFontText">🔎 Diminuir fonte</span> <button onclick="decreaseFont()"
-                    title="Diminuir fonte">A-</button>
-            </div>
-
-            <button onclick="toggleContrast()" title="Ativar/Desativar alto contraste">🌗 Contraste</button>
+            <button onclick="toggleContrast()" title="Ativar/Desativar alto contraste" class="speak">🌗
+                Contraste
+            </button>
         </div>
     </div>
-
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/firebase.js"></script>

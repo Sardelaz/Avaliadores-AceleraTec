@@ -2,124 +2,124 @@
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projetos Cadastrados - AceleraTec 2025</title>
-  <link rel="stylesheet" href="assets/css/painel.css" />
-  <link rel="stylesheet" href="assets/css/acessibilidade.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projetos Cadastrados - AceleraTec 2025</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/painel.css" />
+    <link rel="stylesheet" href="assets/css/acessibilidade.css" />
 </head>
 
 <body>
 
-  <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
+    <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
 
-  <div class="app-container">
-    <div class="header">
-      <header class="app-header">
-        <div class="header-logo">
-          <h1>Projetos AceleraTec</h1>
+
+    <div class="app-container">
+        <div class="header">
+            <header class="app-header">
+                <div class="header-logo">
+                    <h1 class="speak">Projetos AceleraTec</h1>
+                </div>
+            </header>
+
+            <a href="index.html" class="btn-logout speak">Sair</a>
         </div>
-      </header>
 
-      <a href="index.html" class="btn-logout">Sair</a>
+        <main class="app-content">
+            <div class="content-header">
+                <h2 class="speak">Projetos Cadastrados - AceleraTec 2025</h2>
+            </div>
+
+            <div class="filter-container">
+                <label for="filtroCurso" class="speak">Filtrar por Curso e Ano:</label>
+                <select id="filtroCurso">
+                    <option value="" class="speak">Todos</option>
+                    <option value="Comércio Exterior - 1º Ano" class="speak">Comércio Exterior - 1º Ano</option>
+                    <option value="Comércio Exterior - 2º Ano" class="speak">Comércio Exterior - 2º Ano</option>
+                    <option value="Comércio Exterior - 3º Ano" class="speak">Comércio Exterior - 3º Ano</option>
+
+                    <option value="Informática para Internet - 1º Ano" class="speak">Informática para Internet - 1º
+                        Ano</option>
+                    <option value="Informática para Internet - 2º Ano" class="speak">Informática para Internet - 2º
+                        Ano</option>
+                    <option value="Informática para Internet - 3º Ano" class="speak">Informática para Internet - 3º
+                        Ano</option>
+
+                    <option value="Marketing - 1º Ano" class="speak">Marketing - 1º Ano</option>
+                    <option value="Marketing - 2º Ano" class="speak">Marketing - 2º Ano</option>
+                    <option value="Marketing - 3º Ano" class="speak">Marketing - 3º Ano</option>
+
+                    <option value="Recursos Humanos - 1º Ano" class="speak">Recursos Humanos - 1º Ano</option>
+                    <option value="Recursos Humanos - 2º Ano" class="speak">Recursos Humanos - 2º Ano</option>
+                    <option value="Recursos Humanos - 3º Ano" class="speak">Recursos Humanos - 3º Ano</option>
+
+                    <option value="Serviços Jurídicos - 1º Ano" class="speak">Serviços Jurídicos - 1º Ano</option>
+                    <option value="Serviços Jurídicos - 2º Ano" class="speak">Serviços Jurídicos - 2º Ano</option>
+                    <option value="Serviços Jurídicos - 3º Ano" class="speak">Serviços Jurídicos - 3º Ano</option>
+
+                    <option value="Desenvolvimento de Sistemas - 1º Ano" class="speak">Desenvolvimento de Sistemas -
+                        1º Ano</option>
+                    <option value="Desenvolvimento de Sistemas - 2º Ano" class="speak">Desenvolvimento de Sistemas -
+                        2º Ano</option>
+                    <option value="Desenvolvimento de Sistemas - 3º Ano" class="speak">Desenvolvimento de Sistemas -
+                        3º Ano</option>
+
+                    <option value="Segurança do Trabalho - 1º Ano" class="speak">Segurança do Trabalho - 1º Ano
+                    </option>
+                    <option value="Segurança do Trabalho - 2º Ano" class="speak">Segurança do Trabalho - 2º Ano
+                    </option>
+                    <option value="Segurança do Trabalho - 3º Ano" class="speak">Segurança do Trabalho - 3º Ano
+                    </option>
+                </select>
+            </div>
+
+            <div id="projetos-container" class="projetos-container">
+                <p class="loading speak">Carregando projetos...</p>
+            </div>
+        </main>
     </div>
 
 
-    <main class="app-content">
-      <div class="content-header">
-        <h2>Projetos Cadastrados - AceleraTec 2025</h2>
-      </div>
+    <button id="openAccessibility" aria-label="Abrir menu de acessibilidade" title="Acessibilidade">
+        ⚙️
+    </button>
 
-      <div class="filter-container">
-        <label for="filtroCurso">Filtrar por Curso e Ano:</label>
-        <select id="filtroCurso">
-          <option value="">Todos</option>
-          <option value="Comércio Exterior - 1º Ano">Comércio Exterior - 1º Ano</option>
-          <option value="Comércio Exterior - 2º Ano">Comércio Exterior - 2º Ano</option>
-          <option value="Comércio Exterior - 3º Ano">Comércio Exterior - 3º Ano</option>
+    <div id="accessibilityModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeModal" title="Fechar" class="speak">❌</span>
 
-          <option value="Informática para Internet - 1º Ano">Informática para Internet - 1º Ano</option>
-          <option value="Informática para Internet - 2º Ano">Informática para Internet - 2º Ano</option>
-          <option value="Informática para Internet - 3º Ano">Informática para Internet - 3º Ano</option>
+            <div style="margin-top: 1em;">
+                ⚙️
+                <button id="toggleTalkTouchButton" title="TalkTouch - Leitura em voz alta" class="speak">🎙️
+                    TalkTouch</button>
+                <p id="talkTouchStatus" class="speak">TalkTouch: Desativado</p>
+            </div>
 
-          <option value="Marketing - 1º Ano">Marketing - 1º Ano</option>
-          <option value="Marketing - 2º Ano">Marketing - 2º Ano</option>
-          <option value="Marketing - 3º Ano">Marketing - 3º Ano</option>
+            <div style="margin: 1em 0;">
+                🌐 <label for="languageSelector" class="speak">Idioma</label><br />
+                <select id="languageSelector" onchange="changeLanguage()">
+                    <option value="pt" class="speak">Português</option>
+                    <option value="en" class="speak">English</option>
+                    <option value="es" class="speak">Espanhol</option>
+                </select>
+            </div>
 
-          <option value="Recursos Humanos - 1º Ano">Recursos Humanos - 1º Ano</option>
-          <option value="Recursos Humanos - 2º Ano">Recursos Humanos - 2º Ano</option>
-          <option value="Recursos Humanos - 3º Ano">Recursos Humanos - 3º Ano</option>
-
-          <option value="Serviços Jurídicos - 1º Ano">Serviços Jurídicos - 1º Ano</option>
-          <option value="Serviços Jurídicos - 2º Ano">Serviços Jurídicos - 2º Ano</option>
-          <option value="Serviços Jurídicos - 3º Ano">Serviços Jurídicos - 3º Ano</option>
-
-          <option value="Desenvolvimento de Sistemas - 1º Ano">Desenvolvimento de Sistemas - 1º Ano</option>
-          <option value="Desenvolvimento de Sistemas - 2º Ano">Desenvolvimento de Sistemas - 2º Ano</option>
-          <option value="Desenvolvimento de Sistemas - 3º Ano">Desenvolvimento de Sistemas - 3º Ano</option>
-
-          <option value="Segurança do Trabalho - 1º Ano">Segurança do Trabalho - 1º Ano</option>
-          <option value="Segurança do Trabalho - 2º Ano">Segurança do Trabalho - 2º Ano</option>
-          <option value="Segurança do Trabalho - 3º Ano">Segurança do Trabalho - 3º Ano</option>
-        </select>
-      </div>
-
-      <div id="projetos-container" class="projetos-container">
-        <!-- As prateleiras com os cards dos projetos serão inseridas aqui via JavaScript -->
-        <p class="loading">Carregando projetos...</p>
-      </div>
-    </main>
-  </div>
-
-
-  <button id="openAccessibility" aria-label="Abrir menu de acessibilidade" title="Acessibilidade">
-    ⚙️
-  </button>
-
-  <!-- Modal de acessibilidade -->
-  <button id="openAccessibility" aria-label="Abrir menu de acessibilidade" title="Acessibilidade">
-    ⚙️
-  </button>
-
-  <div id="accessibilityModal" class="modal hidden">
-    <div class="modal-content">
-      <span id="closeModal" title="Fechar">❌</span>
-      ⚙️
-      <button id="toggleTalkTouchButton" title="TalkTouch - Leitura em voz alta">🎙️ TalkTouch</button>
-
-      <p id="talkTouchStatus">TalkTouch: Desativado</p>
-
-      <div style="margin: 1em 0;">
-        🌐 <label for="languageSelector">Idioma</label><br />
-        <select id="languageSelector" onchange="changeLanguage()">
-          <option value="pt">Português</option>
-          <option value="en">English</option>
-          <option value="es">Espanhol</option>
-        </select>
-      </div>
-
-      <div style="margin: 1em 0;">
-        <span id="increaseFontText">🔍 Aumentar fonte</span><button onclick="increaseFont()"
-          title="Aumentar fonte">A+</button>
-        <span id="decreaseFontText">🔎 Diminuir fonte</span> <button onclick="decreaseFont()"
-          title="Diminuir fonte">A-</button>
-      </div>
-
-      <button onclick="toggleContrast()" title="Ativar/Desativar alto contraste">🌗 Contraste</button>
+            <button onclick="toggleContrast()" title="Ativar/Desativar alto contraste" class="speak">🌗
+                Contraste
+            </button>
+        </div>
     </div>
-  </div>
 
-  <!-- Firebase + Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-  <script src="js/mouse.js"></script>
-  <script type="module" src="js/firebase.js"></script>
-  <script src="js/acessibilidade.js"></script>
-  <script type="module" src="js/projetos.js"></script>
+    <script src="js/mouse.js"></script>
+    <script type="module" src="js/firebase.js"></script>
+    <script src="js/acessibilidade.js"></script>
+    <script type="module" src="js/projetos.js"></script>
+
 </body>
 
 </html>

@@ -26,29 +26,62 @@ if (modal && openBtn && closeBtn) {
     console.warn("Botão para fechar modal (#closeModal) não encontrado.");
 }
 
-// Funcionalidade TalkTouch (Leitura de Tela)
 // Inicializa o estado lendo do localStorage. Default é false (desligado).
 let talkTouchEnabled = localStorage.getItem("talkTouch") === "true" || false;
 
 // Alterna estado do TalkTouch
 function toggleTalkTouch() {
-  talkTouchEnabled = !talkTouchEnabled; // Inverte o estado
+  talkTouchEnabled = !talkTouchEnabled;
   localStorage.setItem("talkTouch", talkTouchEnabled); // Salva no localStorage
-  applyTalkTouch(); // Aplica/remove os ouvintes de evento de leitura
-  updateTalkTouchStatus(); // Atualiza o texto de status na interface
+  applyTalkTouch();
+  updateTalkTouchStatus();
+
+  const lang = localStorage.getItem("lang") || "pt";
+  const t = translations[lang] || translations["pt"];
+
+  const statusToSpeak = talkTouchEnabled
+    ? t.talkTouchEnabledStatus
+    : t.talkTouchDisabledStatus;
+
+  const fullPhraseToSpeak = `${t.talkTouchLabel} ${statusToSpeak}`;
+
+  const utterance = new SpeechSynthesisUtterance(fullPhraseToSpeak);
+  setSpeechLanguage(utterance, lang);
+
+  window.speechSynthesis.cancel(); // Para qualquer fala em andamento
+  window.speechSynthesis.speak(utterance); // Fala o status
 }
 
-// Adiciona/remove ouvintes de clique (.speak) com base no estado TalkTouch
+// Define o idioma para a síntese de fala
+function setSpeechLanguage(utterance, lang) {
+  if (lang === "en") utterance.lang = "en-US";
+  else if (lang === "es") utterance.lang = "es-ES";
+  else utterance.lang = "pt-BR"; // Padrão português
+}
+
+// Adiciona/remove ouvintes de clique (.speak) e do seletor (.speak) com base no estado TalkTouch
 function applyTalkTouch() {
   const speakElements = document.querySelectorAll(".speak");
   speakElements.forEach((el) => {
     // Sempre remove o ouvinte primeiro para evitar duplicidade
     el.removeEventListener("click", speakText);
-    // Se TalkTouch estiver ligado, adiciona o ouvinte
     if (talkTouchEnabled) {
       el.addEventListener("click", speakText);
     }
   });
+
+  // *** Adiciona/remove ouvinte para o seletor de curso/ano ***
+  const filtroCursoSelect = document.getElementById("filtroCurso");
+  if (filtroCursoSelect) {
+    // Remove o ouvinte existente para evitar duplicidade
+    filtroCursoSelect.removeEventListener("change", speakSelectedOption);
+    if (talkTouchEnabled) {
+      // Adiciona o ouvinte para falar a opção selecionada na mudança
+      filtroCursoSelect.addEventListener("change", speakSelectedOption);
+    }
+  } else {
+    console.warn("Seletor de Curso/Ano (#filtroCurso) não encontrado.");
+  }
 }
 
 // Lê o texto do elemento clicado
@@ -56,16 +89,27 @@ function speakText(event) {
   // Tenta obter texto de innerText, value ou placeholder
   const text =
     event.target.innerText || event.target.value || event.target.placeholder;
-  // Se não houver texto válido, para
   if (!text || text.trim() === "") return;
 
   const utterance = new SpeechSynthesisUtterance(text);
   const lang = localStorage.getItem("lang") || "pt"; // Pega o idioma do localStorage
+  setSpeechLanguage(utterance, lang); // Define o idioma para a síntese de fala
 
-  // Define o idioma para a síntese de fala
-  if (lang === "en") utterance.lang = "en-US";
-  else if (lang === "es") utterance.lang = "es-ES";
-  else utterance.lang = "pt-BR"; // Padrão português
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+// *** Nova função para falar a opção selecionada no seletor ***
+function speakSelectedOption(event) {
+  const selectElement = event.target;
+  const selectedOptionText =
+    selectElement.options[selectElement.selectedIndex].text;
+
+  if (!selectedOptionText || selectedOptionText.trim() === "") return;
+
+  const utterance = new SpeechSynthesisUtterance(selectedOptionText);
+  const lang = localStorage.getItem("lang") || "pt"; // Pega o idioma do localStorage
+  setSpeechLanguage(utterance, lang); // Define o idioma para a síntese de fala
 
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
@@ -74,18 +118,14 @@ function speakText(event) {
 // Atualiza status visual do TalkTouch (parágrafo e botão)
 function updateTalkTouchStatus() {
   const lang = localStorage.getItem("lang") || "pt";
-  // Pega o objeto de tradução para o idioma atual ou padrão pt
   const t = translations[lang] || translations["pt"];
 
-  // Determina o texto do status ("Ligado" ou "Desligado") com base no estado
   const statusText = talkTouchEnabled
     ? t.talkTouchEnabledStatus
     : t.talkTouchDisabledStatus;
 
-  // Cria a string completa para o parágrafo de status
   const fullStatusString = `${t.talkTouchLabel}: ${statusText}`;
 
-  // Atualiza o parágrafo de status se ele existir
   if (talkTouchStatus) {
     talkTouchStatus.textContent = fullStatusString;
   } else {
@@ -94,16 +134,12 @@ function updateTalkTouchStatus() {
     );
   }
 
-  // Atualiza o texto do botão de alternar se ele existir
   if (toggleTalkTouchBtn && t.talkTouchBtnLabel) {
-    // Tenta manter o ícone inicial do botão
     const iconMatch = toggleTalkTouchBtn.innerText.match(/^(\S+)\s*/);
-    const icon = iconMatch ? iconMatch[0] : "🎙️ "; // Ícone padrão caso não encontre
-
-    // Atualiza o texto do botão (ícone + label + status)
-    toggleTalkTouchBtn.innerText = `${icon}${t.talkTouchBtnLabel}: ${statusText}`;
+    const icon = iconMatch ? iconMatch[0] : "🎙️ ";
+    const newText = `${icon}${t.talkTouchBtnLabel}: ${statusText}`;
+    toggleTalkTouchBtn.innerText = newText;
   } else {
-    // O aviso agora reflete que estamos buscando por ID
     console.warn(
       "Botão TalkTouch no modal (#toggleTalkTouchButton) não encontrado ou tradução da label faltando."
     );
@@ -111,11 +147,9 @@ function updateTalkTouchStatus() {
 }
 
 // Adiciona ouvinte ao botão TalkTouch para chamar toggleTalkTouch
-// Agora ele confia na seleção por ID
 if (toggleTalkTouchBtn) {
   toggleTalkTouchBtn.addEventListener("click", toggleTalkTouch);
 } else {
-  // O aviso agora reflete que estamos buscando por ID
   console.warn(
     "Ouvinte de clique NÃO adicionado ao botão TalkTouch pois ele (#toggleTalkTouchButton) não foi encontrado."
   );
@@ -132,9 +166,9 @@ if (languageSelector) {
 function changeLanguage() {
   if (!languageSelector) return;
   const lang = languageSelector.value;
-  localStorage.setItem("lang", lang); // Salva o idioma no localStorage
-  console.log("Idioma alterado para:", lang); // Log para confirmar a chamada
-  updateContent(lang); // Atualiza todo o conteúdo da página com o novo idioma
+  localStorage.setItem("lang", lang);
+  console.log("Idioma alterado para:", lang);
+  updateContent(lang);
 }
 
 // Objeto de traduções para diferentes idiomas
@@ -143,21 +177,17 @@ const translations = {
     // Textos comuns (modal, etc.)
     talkTouchBtnLabel: "TalkTouch",
     talkTouchLabel: "TalkTouch",
-    talkTouchEnabledStatus: "Ligado", // Texto para status LIGADO
-    talkTouchDisabledStatus: "Desligado", // Texto para status DESLIGADO
+    talkTouchEnabledStatus: "Ligado",
+    talkTouchDisabledStatus: "Desligado",
     languageLabel: "Idioma",
-    increaseFontLabel: "Aumentar fonte", // Removido o ícone daqui
-    decreaseFontLabel: "Diminuir fonte", // Removido o ícone daqui
     contrastBtnLabel: "Contraste",
     configuracoesBtn: "⚙️",
-
     // Textos da página Inicial (index.html)
     indexPageTitle: "Área dos Avaliadores",
     welcomeText:
       "Bem-vindo ao painel do <strong>AceleraTec</strong>! <br /> Aqui, professores e avaliadores podem acessar os projetos enviados pelos alunos e conferir todos os detalhes cadastrados.",
     alreadyHaveAccountBtn: "Já tenho uma conta",
     createAccountBtn: "Criar conta",
-
     // Textos da página de Login (login.html)
     loginTitle: "Login - AceleraTec",
     emailLabel: "Email:",
@@ -167,38 +197,64 @@ const translations = {
     entrarBtn: "Entrar",
     naoConta: "Não tem uma conta?",
     registreSe: "Registre-se",
-
     // Textos da página de Registro (registro.html)
     registroTitle: "Registro - AceleraTec",
     registrarBtn: "Registrar",
     jaConta: "Já tem uma conta?",
     loginLink: "Login",
-
     // Textos da página de Projetos (projetos.html)
     projetosTitle: "Projetos Cadastrados - AceleraTec 2025",
     filtroCurso: "Filtrar por Curso e Ano:",
     sair: "Sair",
     carregando: "Carregando projetos...",
+
+    // *** Adicionadas traduções para as opções do filtro de curso/ano ***
+    filterOptions: {
+      "": "Todos",
+      "Comércio Exterior - 1º Ano": "Comércio Exterior - 1º Ano",
+      "Comércio Exterior - 2º Ano": "Comércio Exterior - 2º Ano",
+      "Comércio Exterior - 3º Ano": "Comércio Exterior - 3º Ano",
+      "Informática para Internet - 1º Ano":
+        "Informática para Internet - 1º Ano",
+      "Informática para Internet - 2º Ano":
+        "Informática para Internet - 2º Ano",
+      "Informática para Internet - 3º Ano":
+        "Informática para Internet - 3º Ano",
+      "Marketing - 1º Ano": "Marketing - 1º Ano",
+      "Marketing - 2º Ano": "Marketing - 2º Ano",
+      "Marketing - 3º Ano": "Marketing - 3º Ano",
+      "Recursos Humanos - 1º Ano": "Recursos Humanos - 1º Ano",
+      "Recursos Humanos - 2º Ano": "Recursos Humanos - 2º Ano",
+      "Recursos Humanos - 3º Ano": "Recursos Humanos - 3º Ano",
+      "Serviços Jurídicos - 1º Ano": "Serviços Jurídicos - 1º Ano",
+      "Serviços Jurídicos - 2º Ano": "Serviços Jurídicos - 2º Ano",
+      "Serviços Jurídicos - 3º Ano": "Serviços Jurídicos - 3º Ano",
+      "Desenvolvimento de Sistemas - 1º Ano":
+        "Desenvolvimento de Sistemas - 1º Ano",
+      "Desenvolvimento de Sistemas - 2º Ano":
+        "Desenvolvimento de Sistemas - 2º Ano",
+      "Desenvolvimento de Sistemas - 3º Ano":
+        "Desenvolvimento de Sistemas - 3º Ano",
+      "Segurança do Trabalho - 1º Ano": "Segurança do Trabalho - 1º Ano",
+      "Segurança do Trabalho - 2º Ano": "Segurança do Trabalho - 2º Ano",
+      "Segurança do Trabalho - 3º Ano": "Segurança do Trabalho - 3º Ano",
+    },
   },
   en: {
     // Textos comuns
     talkTouchBtnLabel: "TalkTouch",
     talkTouchLabel: "TalkTouch",
-    talkTouchEnabledStatus: "On", // Texto para status LIGADO
-    talkTouchDisabledStatus: "Off", // Texto para status DESLIGADO
+    talkTouchEnabledStatus: "On",
+    talkTouchDisabledStatus: "Off",
     languageLabel: "Language",
-    increaseFontLabel: "Increase Font", // Removido o ícone
-    decreaseFontLabel: "Decrease Font", // Removido o ícone
     contrastBtnLabel: "Contrast",
     configuracoesBtn: "⚙️",
-
     // Textos da página Inicial
     indexPageTitle: "Evaluators Area",
     welcomeText:
       "Welcome to the <strong>AceleraTec</strong> panel! <br /> Here, teachers and evaluators can access the projects submitted by students and check all registered details.",
     alreadyHaveAccountBtn: "Already have an account",
     createAccountBtn: "Create account",
-
     // Textos da página de Login
     loginTitle: "Login - AceleraTec",
     emailLabel: "Email:",
@@ -208,28 +264,50 @@ const translations = {
     entrarBtn: "Login",
     naoConta: "Don't have an account?",
     registreSe: "Register",
-
     // Textos da página de Registro
     registroTitle: "Registration - AceleraTec",
     registrarBtn: "Register",
     jaConta: "Already have an account?",
     loginLink: "Login",
-
     // Textos da página de Projetos
     projetosTitle: "Registered Projects - AceleraTec 2025",
     filtroCurso: "Filter by Course and Year:",
     sair: "Logout",
     carregando: "Loading projects...",
+
+    // *** Adicionadas traduções para as opções do filtro de curso/ano ***
+    filterOptions: {
+      "": "All",
+      "Comércio Exterior - 1º Ano": "Foreign Trade - 1st Year",
+      "Comércio Exterior - 2º Ano": "Foreign Trade - 2nd Year",
+      "Comércio Exterior - 3º Ano": "Foreign Trade - 3rd Year",
+      "Informática para Internet - 1º Ano": "Internet Computing - 1st Year",
+      "Informática para Internet - 2º Ano": "Internet Computing - 2nd Year",
+      "Informática para Internet - 3º Ano": "Internet Computing - 3rd Year",
+      "Marketing - 1º Ano": "Marketing - 1st Year",
+      "Marketing - 2º Ano": "Marketing - 2nd Year",
+      "Marketing - 3º Ano": "Marketing - 3rd Year",
+      "Recursos Humanos - 1º Ano": "Human Resources - 1st Year",
+      "Recursos Humanos - 2º Ano": "Human Resources - 2nd Year",
+      "Recursos Humanos - 3º Ano": "Human Resources - 3rd Year",
+      "Serviços Jurídicos - 1º Ano": "Legal Services - 1st Year",
+      "Serviços Jurídicos - 2º Ano": "Legal Services - 2nd Year",
+      "Serviços Jurídicos - 3º Ano": "Legal Services - 3rd Year",
+      "Desenvolvimento de Sistemas - 1º Ano": "Systems Development - 1st Year",
+      "Desenvolvimento de Sistemas - 2º Ano": "Systems Development - 2nd Year",
+      "Desenvolvimento de Sistemas - 3º Ano": "Systems Development - 3rd Year",
+      "Segurança do Trabalho - 1º Ano": "Work Safety - 1st Year",
+      "Segurança do Trabalho - 2º Ano": "Work Safety - 2nd Year",
+      "Segurança do Trabalho - 3º Ano": "Work Safety - 3rd Year",
+    },
   },
   es: {
     // Textos comuns
     talkTouchBtnLabel: "TalkTouch",
     talkTouchLabel: "TalkTouch",
-    talkTouchEnabledStatus: "Activado", // Texto para status LIGADO
-    talkTouchDisabledStatus: "Desactivado", // Texto para status DESLIGADO
+    talkTouchEnabledStatus: "Activado",
+    talkTouchDisabledStatus: "Desactivado",
     languageLabel: "Idioma",
-    increaseFontLabel: "Aumentar fuente", // Removido o ícone
-    decreaseFontLabel: "Disminuir fuente", // Removido o ícone
     contrastBtnLabel: "Contraste",
     configuracoesBtn: "⚙️",
     indexPageTitle: "Área de Evaluadores",
@@ -237,7 +315,6 @@ const translations = {
       "¡Bienvenido al panel de <strong>AceleraTec</strong>! <br /> Aquí, profesores y evaluadores pueden acceder a los proyectos enviados por los alumnos y verificar todos los detalles registrados.",
     alreadyHaveAccountBtn: "Ya tengo una cuenta",
     createAccountBtn: "Crear cuenta",
-
     // Textos de la página Login.html
     loginTitle: "Inicio de sesión - AceleraTec",
     emailLabel: "Correo electrónico:",
@@ -247,113 +324,86 @@ const translations = {
     entrarBtn: "Ingresar",
     naoConta: "¿No tienes una cuenta?",
     registreSe: "Regístrate",
-
     // Textos de la página Registro.html
     registroTitle: "Registro - AceleraTec",
     registrarBtn: "Registrar",
     jaConta: "¿Ya tienes una cuenta?",
     loginLink: "Iniciar sesión",
-
     // Textos de la página Projetos.html
     projetosTitle: "Proyectos Registrados - AceleraTec 2025",
     filtroCurso: "Filtrar por Curso y Año:",
     sair: "Cerrar sesión",
     carregando: "Cargando proyectos...",
+
+    // *** Adicionadas traduções para as opções do filtro de curso/año ***
+    filterOptions: {
+      "": "Todos",
+      "Comércio Exterior - 1º Ano": "Comercio Exterior - 1º Año",
+      "Comércio Exterior - 2º Ano": "Comercio Exterior - 2º Año",
+      "Comércio Exterior - 3º Ano": "Comercio Exterior - 3º Año",
+      "Informática para Internet - 1º Ano":
+        "Informática para Internet - 1º Año",
+      "Informática para Internet - 2º Ano":
+        "Informática para Internet - 2º Año",
+      "Informática para Internet - 3º Ano":
+        "Informática para Internet - 3º Año",
+      "Marketing - 1º Ano": "Marketing - 1º Año",
+      "Marketing - 2º Ano": "Marketing - 2º Año",
+      "Marketing - 3º Ano": "Marketing - 3º Año",
+      "Recursos Humanos - 1º Ano": "Recursos Humanos - 1º Año",
+      "Recursos Humanos - 2º Ano": "Recursos Humanos - 2º Año",
+      "Recursos Humanos - 3º Ano": "Recursos Humanos - 3º Año",
+      "Serviços Jurídicos - 1º Ano": "Servicios Jurídicos - 1º Año",
+      "Serviços Jurídicos - 2º Ano": "Servicios Jurídicos - 2º Año",
+      "Serviços Jurídicos - 3º Ano": "Servicios Jurídicos - 3º Año",
+      "Desenvolvimento de Sistemas - 1º Ano": "Desarrollo de Sistemas - 1º Año",
+      "Desenvolvimento de Sistemas - 2º Ano": "Desarrollo de Sistemas - 2º Año",
+      "Desenvolvimento de Sistemas - 3º Ano": "Desarrollo de Sistemas - 3º Año",
+      "Segurança do Trabalho - 1º Ano": "Seguridad Laboral - 1º Año",
+      "Segurança do Trabalho - 2º Ano": "Seguridad Laboral - 2º Año",
+      "Segurança do Trabalho - 3º Ano": "Seguridad Laboral - 3º Año",
+    },
   },
 };
 
 // Atualiza conteúdo da página por idioma
 function updateContent(lang) {
-  console.log("updateContent chamado para idioma:", lang); // Log para confirmar a chamada
-  let t = translations[lang]; // Pega o objeto de tradução para o idioma atual
+  console.log("updateContent chamado para idioma:", lang);
+  let t = translations[lang];
 
-  // Verifica se o idioma e as traduções existem, caso contrário, usa pt
   if (!t) {
     console.warn(`Traduções para "${lang}" não encontradas. Usando pt.`);
-    lang = "pt"; // Garante que lang seja 'pt' para a próxima linha
+    lang = "pt";
     t = translations["pt"];
     if (!t) {
       console.error(
         "Traduções padrão 'pt' também não encontradas. Conteúdo não atualizado."
       );
-      return; // Sai da função se nem 'pt' for encontrado
+      return;
     }
   }
 
-  // Atualiza label do seletor de idioma no modal
   const languageLabelElement = document.querySelector(
     "#accessibilityModal label[for='languageSelector']"
   );
   if (languageLabelElement && t.languageLabel) {
     languageLabelElement.innerText = t.languageLabel;
-    console.log("Label de idioma atualizado:", languageLabelElement.innerText); // Log
   }
 
-  // --- Atualiza texto de Fonte ---
-  // Busca pelos elementos span com IDs específicos adicionados no HTML para tradução
-  const increaseTextElement = document.getElementById("increaseFontText");
-  if (increaseTextElement && t.increaseFontLabel) {
-    // Pega o ícone do próprio elemento span no HTML
-    const iconMatch = increaseTextElement.textContent.match(/^(\S+)\s*/);
-    const icon = iconMatch ? iconMatch[0] : ""; // Usa o ícone encontrado ou string vazia
-    const newText = icon + t.increaseFontLabel;
-    increaseTextElement.textContent = newText; // Atualiza o texto
-    console.log("Texto 'Aumentar fonte' atualizado para:", newText); // Log
-  } else if (!increaseTextElement) {
-    // Apenas um aviso, pois a funcionalidade principal não depende disso
-    console.warn(
-      "Elemento para texto 'Aumentar fonte' (#increaseFontText) não encontrado para tradução."
-    );
-  } else {
-    console.log(
-      "Tradução 'Aumentar fonte' encontrada, mas elemento (#increaseFontText) não."
-    ); // Log
-  }
-
-  const decreaseTextElement = document.getElementById("decreaseFontText");
-  if (decreaseTextElement && t.decreaseFontLabel) {
-    // Pega o ícone do próprio elemento span no HTML
-    const iconMatch = decreaseTextElement.textContent.match(/^(\S+)\s*/);
-    const icon = iconMatch ? iconMatch[0] : ""; // Usa o ícone encontrado ou string vazia
-    const newText = icon + t.decreaseFontLabel;
-    decreaseTextElement.textContent = newText; // Atualiza o texto
-    console.log("Texto 'Diminuir fonte' atualizado para:", newText); // Log
-  } else if (!decreaseTextElement) {
-    // Apenas um aviso
-    console.warn(
-      "Elemento para texto 'Diminuir fonte' (#decreaseFontText) não encontrado para tradução."
-    );
-  } else {
-    console.log(
-      "Tradução 'Diminuir fonte' encontrada, mas elemento (#decreaseFontText) não."
-    ); // Log
-  }
-
-  // Atualiza texto do botão de contraste no modal
   const contrastButtonInModal = document.querySelector(
     "#accessibilityModal button[onclick='toggleContrast()']"
   );
   if (contrastButtonInModal && t.contrastBtnLabel) {
-    // Pega o ícone do próprio botão antes de atualizar o texto
     const iconMatch = contrastButtonInModal.innerText.match(/^(\S+)\s*/);
-    const icon = iconMatch ? iconMatch[0] : "🌗 "; // Usa 🌗 como padrão se não encontrar
-    const newText = icon + t.contrastBtnLabel;
-    contrastButtonInModal.innerText = newText; // Mantém o ícone e atualiza o texto traduzido
-    console.log("Texto 'Contraste' atualizado para:", newText); // Log
+    const icon = iconMatch ? iconMatch[0] : "🌗 ";
+    contrastButtonInModal.innerText = icon + t.contrastBtnLabel;
   } else {
-    // Aviso caso o botão de contraste não seja encontrado (ele ainda usa onclick no seletor)
     console.warn(
       "Botão Contraste no modal (querySelector com onclick) não encontrado."
     );
   }
 
-  // Atualiza status TalkTouch (chama a função que atualiza parágrafo e botão)
-  updateTalkTouchStatus(); // Esta função já possui logs internos
-
-  // --- Atualiza conteúdo específico da página (index.html, login.html, etc.) ---
-  // Os seletores abaixo funcionam para a estrutura que você mostrou para index.html
-  // e presumivelmente para as outras páginas, pois eles verificam se o elemento existe
-  // antes de tentar atualizar.
+  updateTalkTouchStatus();
 
   // Atualiza conteúdo da página Inicial (index.html)
   const indexPageContainer = document.querySelector("div.container.speak");
@@ -362,7 +412,7 @@ function updateContent(lang) {
     if (h1Element && t.indexPageTitle) h1Element.innerText = t.indexPageTitle;
 
     const pElement = indexPageContainer.querySelector("p.speak");
-    if (pElement && t.welcomeText) pElement.innerHTML = t.welcomeText; // Usa innerHTML por causa do <strong> e <br />
+    if (pElement && t.welcomeText) pElement.innerHTML = t.welcomeText;
 
     const buttonsDiv = indexPageContainer.querySelector(".buttons");
     if (buttonsDiv) {
@@ -376,10 +426,10 @@ function updateContent(lang) {
     }
   }
 
-  // Atualiza conteúdo da página de Login (login.html) - Seletores genéricos H1 e P, podem precisar de ajuste
+  // Atualiza conteúdo da página de Login (login.html)
   const loginForm = document.querySelector("form#loginForm");
   if (loginForm) {
-    const loginH1 = document.querySelector("h1"); // Melhor usar um ID ou classe específica para o título
+    const loginH1 = document.querySelector("h1");
     if (loginH1 && t.loginTitle) loginH1.innerText = t.loginTitle;
     const emailLabel = loginForm.querySelector("label[for='email']");
     if (emailLabel && t.emailLabel) emailLabel.innerText = t.emailLabel;
@@ -393,15 +443,15 @@ function updateContent(lang) {
       senhaInput.placeholder = t.senhaPlaceholder;
     const loginButton = loginForm.querySelector("button[type='submit']");
     if (loginButton && t.entrarBtn) loginButton.innerText = t.entrarBtn;
-    const loginNoAccountPara = loginForm.querySelector("p"); // Melhor usar um ID ou classe específica para este parágrafo
+    const loginNoAccountPara = loginForm.querySelector("p");
     if (loginNoAccountPara && t.naoConta && t.registreSe)
       loginNoAccountPara.innerHTML = `${t.naoConta} <a href="registro.html">${t.registreSe}</a>`;
   }
 
-  // Atualiza conteúdo da página de Registro (registro.html) - Seletores genéricos H1 e P
+  // Atualiza conteúdo da página de Registro (registro.html)
   const registerForm = document.querySelector("form#registerForm");
   if (registerForm) {
-    const registerH1 = document.querySelector("h1"); // Melhor usar um ID ou classe específica
+    const registerH1 = document.querySelector("h1");
     if (registerH1 && t.registroTitle) registerH1.innerText = t.registroTitle;
     const emailLabel = registerForm.querySelector("label[for='email']");
     if (emailLabel && t.emailLabel) emailLabel.innerText = t.emailLabel;
@@ -416,17 +466,14 @@ function updateContent(lang) {
     const registerButton = registerForm.querySelector("button[type='submit']");
     if (registerButton && t.registrarBtn)
       registerButton.innerText = t.registrarBtn;
-    const registerHasAccountPara = registerForm.querySelector("p"); // Melhor usar um ID ou classe específica
+    const registerHasAccountPara = registerForm.querySelector("p");
     if (registerHasAccountPara && t.jaConta && t.loginLink)
       registerHasAccountPara.innerHTML = `${t.jaConta} <a href="login.html">${t.loginLink}</a>`;
   }
 
   // Atualiza conteúdo da página de Projetos (projetos.html)
-  const appContent = document.querySelector(".app-content"); // Container da página de projetos
+  const appContent = document.querySelector(".app-content");
   if (appContent) {
-    // Ajuste os seletores abaixo (.header-logo h1, .content-header h2)
-    // para o que realmente corresponde ao título principal na sua página de projetos.
-    // Talvez seja apenas um H1 ou H2 específico.
     const headerLogoH1 = document.querySelector(".header-logo h1");
     if (headerLogoH1 && t.projetosTitle)
       headerLogoH1.innerText = t.projetosTitle;
@@ -438,63 +485,75 @@ function updateContent(lang) {
     const filtroLabel = appContent.querySelector("label[for='filtroCurso']");
     if (filtroLabel && t.filtroCurso) filtroLabel.innerText = t.filtroCurso;
 
-    // Supondo que o botão Sair tenha a classe .btn-logout e esteja na página de projetos
     const logoutButton = document.querySelector(".btn-logout");
     if (logoutButton && t.sair) logoutButton.innerText = t.sair;
 
+    // *** Atualiza texto do parágrafo de carregamento ***
     const loadingPara = appContent.querySelector(
       "#projetos-container p.loading"
     );
-    if (loadingPara && t.carregando) loadingPara.innerText = t.carregando;
+    if (loadingPara && t.carregando) {
+      loadingPara.innerText = t.carregando;
+    } else if (!loadingPara) {
+      console.warn(
+        "Parágrafo de carregamento (#projetos-container p.loading) não encontrado para tradução. Ele pode ter sido removido dinamicamente."
+      );
+    }
+
+    // *** Traduz as opções do seletor de curso/ano ***
+    const filtroCursoSelect = document.getElementById("filtroCurso");
+    if (filtroCursoSelect && t.filterOptions) {
+      for (let i = 0; i < filtroCursoSelect.options.length; i++) {
+        const option = filtroCursoSelect.options[i];
+        // Usa o 'value' da option como chave para buscar a tradução
+        const translationKey = option.value;
+        // Fallback para innerText se a chave de tradução não for encontrada pelo value
+        const translatedText =
+          t.filterOptions[translationKey] ||
+          (translations["pt"].filterOptions
+            ? translations["pt"].filterOptions[translationKey]
+            : null) ||
+          option.innerText;
+        option.innerText = translatedText;
+      }
+    } else if (!filtroCursoSelect) {
+      console.warn(
+        "Seletor de Curso/Ano (#filtroCurso) não encontrado para tradução."
+      );
+    } else if (!t.filterOptions) {
+      console.warn(
+        `Objeto de traduções para as opções do filtro ("filterOptions") não encontrado para o idioma "${lang}".`
+      );
+    }
   }
 }
 
 // Inicialização ao carregar o DOM
 document.addEventListener("DOMContentLoaded", () => {
-  // Configura o texto inicial do botão fechar do modal
   if (closeBtn) {
-    closeBtn.innerText = "❌"; // Garante que o X esteja lá
+    closeBtn.innerText = "❌";
   } else {
     console.warn(
       "Botão fechar modal (#closeModal) não encontrado durante DOMContentLoaded."
     );
   }
 
-  // Lida com o idioma salvo no localStorage na carga da página
   const lang = localStorage.getItem("lang") || "pt";
   if (languageSelector) {
-    // Define o valor do seletor para o idioma salvo
     languageSelector.value = lang;
-    // Verifica se o valor salvo não é uma opção válida e corrige localStorage se necessário
     if (languageSelector.value !== lang) {
       console.warn(
         `Idioma "${lang}" do localStorage não encontrado nas opções do languageSelector. Usando o valor selecionado no seletor (${languageSelector.value}).`
       );
       localStorage.setItem("lang", languageSelector.value);
-      // A variável `lang` já tem o valor correto para updateContent
     }
-    console.log("Idioma inicial (DOMContentLoaded):", languageSelector.value); // Log
+    console.log("Idioma inicial (DOMContentLoaded):", languageSelector.value);
   } else {
     console.warn(
       "Seletor de Idioma (#languageSelector) não encontrado durante DOMContentLoaded."
     );
   }
 
-  // Atualiza todo o conteúdo da página para o idioma inicial (do localStorage ou padrão)
-  // Isso também chama updateTalkTouchStatus para definir o status inicial visual
   updateContent(lang);
-
-  // Aplica os ouvintes de clique (.speak) com base no estado TalkTouch inicial (do localStorage)
   applyTalkTouch();
 });
-
-// Funções placeholder para fonte e contraste (precisam ser implementadas)
-function increaseFont() {
-  console.log("increaseFont function called"); /* Implementar lógica aqui */
-}
-function decreaseFont() {
-  console.log("decreaseFont function called"); /* Implementar lógica aqui */
-}
-function toggleContrast() {
-  console.log("toggleContrast function called"); /* Implementar lógica aqui */
-}
