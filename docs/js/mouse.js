@@ -1,10 +1,10 @@
-const imagemPrincipal = document.getElementById('aceleria');
+const imagemPrincipal = document.getElementById("aceleria");
 const body = document.body;
 
 let podeCriarRastro = true;
 const intervaloRastro = 30;
 
-window.addEventListener('mousemove', (event) => {
+window.addEventListener("mousemove", (event) => {
   const x = event.clientX;
   const y = event.clientY;
 
@@ -12,8 +12,10 @@ window.addEventListener('mousemove', (event) => {
   const offsetY = imagemPrincipal.offsetHeight / 2;
 
   // Ajuste para o fantasma ficar mais perto do mouse com suavização
-  imagemPrincipal.style.transition = 'transform 0.1s ease-out'; // Suaviza a movimentação
-  imagemPrincipal.style.transform = `translate(${x - offsetX}px, ${y - offsetY}px)`;
+  imagemPrincipal.style.transition = "transform 0.1s ease-out"; // Suaviza a movimentação
+  imagemPrincipal.style.transform = `translate(${x - offsetX}px, ${
+    y - offsetY
+  }px)`;
 
   if (podeCriarRastro) {
     criarElementoRastro(x, y);
@@ -25,8 +27,8 @@ window.addEventListener('mousemove', (event) => {
 });
 
 function criarElementoRastro(x, y) {
-  const rastro = document.createElement('div');
-  rastro.className = 'rastro';
+  const rastro = document.createElement("div");
+  rastro.className = "rastro";
   const tamanhoRastro = 15;
   rastro.style.left = `${x - tamanhoRastro / 2}px`;
   rastro.style.top = `${y - tamanhoRastro / 2}px`;
@@ -39,4 +41,3 @@ function criarElementoRastro(x, y) {
     }
   }, 800);
 }
-  

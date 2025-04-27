@@ -12,7 +12,7 @@ cursor: pointer;
 z-index: 9999;
 box-shadow: 3px 3px 0 #000;
 transition: transform 0.2s ease;
-width: 80px;
+width: 70px;
 }
 
 #openAccessibility:hover {

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Proffys AceleraTec</title>
   <link rel="stylesheet" href="assets/css/index.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css">
 </head>
+
 <body>
 
   <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
@@ -15,7 +17,8 @@
     <h1 class="speak">Área dos Avaliadores</h1>
     <p class="speak">
       Bem-vindo ao painel do <strong>AceleraTec</strong>! <br />
-      Aqui, professores e avaliadores podem acessar os projetos enviados pelos alunos e conferir todos os detalhes cadastrados.
+      Aqui, professores e avaliadores podem acessar os projetos enviados pelos alunos e conferir todos os detalhes
+      cadastrados.
     </p>
     <div class="buttons">
       <a href="login.html" class="btn btn-primary speak">Já tenho uma conta</a>
@@ -26,31 +29,31 @@
   <button id="openAccessibility" aria-label="Abrir menu de acessibilidade" title="Acessibilidade">
     ⚙️
   </button>
-  
-  <!-- Modal de acessibilidade -->
+
   <div id="accessibilityModal" class="modal hidden">
     <div class="modal-content">
       <span id="closeModal" title="Fechar">❌</span>
-      <h2 style="font-family: 'Marimpa', cursive;">⚙️ Acessibilidade</h2>
-  
-      <button onclick="toggleTalkTouch()" title="TalkTouch - Leitura em voz alta">🎙️ TalkTouch</button>
-  
-      <!-- Novo elemento para mostrar o status do TalkTouch -->
+      ⚙️
+      <button id="toggleTalkTouchButton" title="TalkTouch - Leitura em voz alta">🎙️ TalkTouch</button>
+
       <p id="talkTouchStatus">TalkTouch: Desativado</p>
-  
+
       <div style="margin: 1em 0;">
-        🌐 <label for="languageSelector">Idioma</label><br/>
+        🌐 <label for="languageSelector">Idioma</label><br />
         <select id="languageSelector" onchange="changeLanguage()">
           <option value="pt">Português</option>
           <option value="en">English</option>
+          <option value="es">Espanhol</option>
         </select>
       </div>
-  
+
       <div style="margin: 1em 0;">
-        🔍 Aumentar fonte<button onclick="increaseFont()" title="Aumentar fonte">A+</button>
-        🔎 Diminuir fonte <button onclick="decreaseFont()" title="Diminuir fonte">A-</button>
+        <span id="increaseFontText">🔍 Aumentar fonte</span><button onclick="increaseFont()"
+          title="Aumentar fonte">A+</button>
+        <span id="decreaseFontText">🔎 Diminuir fonte</span> <button onclick="decreaseFont()"
+          title="Diminuir fonte">A-</button>
       </div>
-  
+
       <button onclick="toggleContrast()" title="Ativar/Desativar alto contraste">🌗 Contraste</button>
     </div>
   </div>
@@ -59,4 +62,5 @@
   <script src="js/acessibilidade.js"></script>
 
 </body>
+
 </html>

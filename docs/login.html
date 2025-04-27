@@ -1,73 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Login - AceleraTec</title>
-    <link rel="stylesheet" href="assets/css/login.css">
-    <link rel="stylesheet" href="assets/css/acessibilidade.css">
+  <meta charset="UTF-8">
+  <title>Login - AceleraTec</title>
+  <link rel="stylesheet" href="assets/css/login.css">
+  <link rel="stylesheet" href="assets/css/acessibilidade.css">
 </head>
+
 <body>
 
-    <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
+  <img id="aceleria" src="assets/images/acelerIA.png" alt="cursor decorativo" />
 
-    <a href="index.html" class="back-arrow">
-        <img src="assets/images/seta.png" alt="Voltar">
-    </a>
+  <a href="index.html" class="back-arrow">
+    <img src="assets/images/seta.png" alt="Voltar">
+  </a>
 
-    <div class="login-container">
-        <form id="loginForm">
-            <h1>Login - AceleraTec</h1>
-            <label for="email">Email:</label>
-            <input type="email" id="email" required placeholder="Digite seu email">
+  <div class="login-container">
+    <form id="loginForm">
+      <h1 class="speak">Login - AceleraTec</h1>
 
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" required placeholder="Digite sua senha">
+      <label for="email" class="speak">Email:</label>
+      <input type="email" id="email" required placeholder="Digite seu email" class="speak">
 
-            <button type="submit">Entrar</button>
-            <div id="mensagemErro" class="erro"></div>
+      <label for="senha" class="speak">Senha:</label>
+      <input type="password" id="senha" required placeholder="Digite sua senha" class="speak">
 
-            <p>Não tem uma conta? <a href="registro.html">Registre-se</a></p>
-        </form>
-    </div>
+      <button type="submit" class="speak">Entrar</button>
+      <div id="mensagemErro" class="erro speak"></div>
+      <p class="speak">Não tem uma conta? <a href="registro.html" class="speak">Registre-se</a></p>
+    </form>
+  </div>
 
-    
   <button id="openAccessibility" aria-label="Abrir menu de acessibilidade" title="Acessibilidade">
     ⚙️
   </button>
-  
-  <!-- Modal de acessibilidade -->
+
   <div id="accessibilityModal" class="modal hidden">
     <div class="modal-content">
       <span id="closeModal" title="Fechar">❌</span>
-      <h2 style="font-family: 'Marimpa', cursive;">⚙️ Acessibilidade</h2>
-  
-      <button onclick="toggleTalkTouch()" title="TalkTouch - Leitura em voz alta">🎙️ TalkTouch</button>
-  
-      <!-- Novo elemento para mostrar o status do TalkTouch -->
+      ⚙️
+      <button id="toggleTalkTouchButton" title="TalkTouch - Leitura em voz alta">🎙️ TalkTouch</button>
+
       <p id="talkTouchStatus">TalkTouch: Desativado</p>
-  
+
       <div style="margin: 1em 0;">
-        🌐 <label for="languageSelector">Idioma</label><br/>
+        🌐 <label for="languageSelector">Idioma</label><br />
         <select id="languageSelector" onchange="changeLanguage()">
           <option value="pt">Português</option>
           <option value="en">English</option>
+          <option value="es">Espanhol</option>
         </select>
       </div>
-  
+
       <div style="margin: 1em 0;">
-        🔍 Aumentar fonte<button onclick="increaseFont()" title="Aumentar fonte">A+</button>
-        🔎 Diminuir fonte <button onclick="decreaseFont()" title="Diminuir fonte">A-</button>
+        <span id="increaseFontText">🔍 Aumentar fonte</span><button onclick="increaseFont()"
+          title="Aumentar fonte">A+</button>
+        <span id="decreaseFontText">🔎 Diminuir fonte</span> <button onclick="decreaseFont()"
+          title="Diminuir fonte">A-</button>
       </div>
-  
+
       <button onclick="toggleContrast()" title="Ativar/Desativar alto contraste">🌗 Contraste</button>
     </div>
   </div>
 
-    <!-- Firebase config e scripts -->
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="js/firebase.js"></script>
-    <script type="module" src="js/login.js"></script>
-    <script src="js/acessibilidade.js"></script>
-    <script src="js/mouse.js"></script>
+
+  <!-- Firebase config e scripts -->
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/login.js"></script>
+  <script src="js/acessibilidade.js"></script>
+  <script src="js/mouse.js"></script>
 </body>
+
 </html>
