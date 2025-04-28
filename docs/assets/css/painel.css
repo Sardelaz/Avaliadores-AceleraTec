@@ -27,7 +27,7 @@ body {
   height: auto;
   left: 0;
   top: 0;
-  pointer-events: none; 
+  pointer-events: none;
   transition: transform 0.05s linear;
   z-index: 10000;
   filter: drop-shadow(0 0 5px #42c920);
@@ -35,7 +35,7 @@ body {
 
 .rastro {
   position: fixed;
-  pointer-events: none; 
+  pointer-events: none;
   width: 10px;
   height: 10px;
   background-color: #42c920;
@@ -47,16 +47,17 @@ body {
 
 @keyframes fadeOut {
   from {
-      opacity: 0.8;
-      transform: scale(1);
+    opacity: 0.8;
+    transform: scale(1);
   }
+
   to {
-      opacity: 0;
-      transform: scale(0.2);
+    opacity: 0;
+    transform: scale(0.2);
   }
 }
 
-.header{
+.header {
   display: flex;
   justify-content: space-between;
 }
@@ -100,7 +101,7 @@ body {
 /* Cabeçalho do App */
 .app-header {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   background-color: #b3552f;
   border: 5px solid #212121;
@@ -114,8 +115,8 @@ body {
 .header-logo {
   display: flex;
   align-items: center;
-  justify-content: flex-start; 
-  width: 100%; 
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .header-logo h1 {
@@ -125,7 +126,8 @@ body {
   text-shadow: 3px 3px 0 #212121;
   letter-spacing: 1px;
   text-align: left;
-  margin-right: 30px; /* Espaço à direita do título */
+  margin-right: 30px;
+  /* Espaço à direita do título */
 }
 
 /* Título da seção de conteúdo */
@@ -186,8 +188,8 @@ body {
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1.2rem;
-  padding-right: 3rem; 
-  cursor: pointer; 
+  padding-right: 3rem;
+  cursor: pointer;
 }
 
 .filter-container select:hover {
@@ -206,8 +208,13 @@ body {
 }
 
 @keyframes bounce {
-  from { transform: scale(1); }
-  to { transform: scale(1.05); }
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.05);
+  }
 }
 
 /* Container dos projetos em Grid */
@@ -275,24 +282,43 @@ body {
   background-color: #da6531;
 }
 
+.btn-avaliar {
+  display: inline-block;
+  margin-top: 0.5rem;
+  margin-left: 30%;
+  padding: 10px 15px;
+  background-color: #da6531;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  border: 3px solid #212121;
+  box-shadow: 3px 3px 0 #212121;
+  transition: transform 0.1s ease;
+  letter-spacing: 3px;
+  font-size: 16px;
+}
+
 /* Responsivo */
 @media (max-width: 650px) {
 
-  
 
-  .header{
+
+  .header {
     flex-direction: column;
   }
-  .btn-logout{
-    width: 90% ;
+
+  .btn-logout {
+    width: 90%;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
   }
+
   .content-header h2 {
-     font-size: 24px;
-  } 
+    font-size: 24px;
+  }
 
   .filter-container label,
   .filter-container select {
@@ -308,32 +334,32 @@ body {
   }
 
   .btn-logout {
-      padding: 8px 15px;
-      font-size: 14px;
+    padding: 8px 15px;
+    font-size: 14px;
   }
 
   /* Ajusta o cabeçalho em telas menores */
   .app-header {
-      flex-direction: column;
-      align-items: flex-start; 
-      padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
   }
 
   .header-logo {
-      width: 100%;
-      margin-bottom: 1rem;
-      justify-content: center; 
+    width: 100%;
+    margin-bottom: 1rem;
+    justify-content: center;
 
-  .header-logo h1 {
-      font-size: 32px; 
-      text-align: center; 
-      margin-right: 0; 
+    .header-logo h1 {
+      font-size: 32px;
+      text-align: center;
+      margin-right: 0;
+    }
+
+    .btn-logout {
+      width: auto;
+      align-self: center;
+    }
+
   }
-
-  .btn-logout {
-      width: auto; 
-      align-self: center; 
-  }
-
-}
 }

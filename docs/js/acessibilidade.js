@@ -557,3 +557,51 @@ document.addEventListener("DOMContentLoaded", () => {
   updateContent(lang);
   applyTalkTouch();
 });
+document.addEventListener('DOMContentLoaded', function () {
+  const filtroCurso = document.getElementById("filtroCurso");
+  const openAccessibilityButton = document.getElementById("openAccessibility");
+  const accessibilityModal = document.getElementById("accessibilityModal");
+  const closeModalButton = document.getElementById("closeModal");
+
+  // Abre o modal de acessibilidade
+  if (openAccessibilityButton) {
+      openAccessibilityButton.addEventListener("click", () => {
+          accessibilityModal.classList.remove("hidden");
+      });
+  }
+
+  // Fecha o modal de acessibilidade
+  if (closeModalButton) {
+      closeModalButton.addEventListener("click", () => {
+          accessibilityModal.classList.add("hidden");
+      });
+  }
+
+  // Função para alterar idioma
+  function changeLanguage() {
+      const languageSelector = document.getElementById("languageSelector");
+      const language = languageSelector.value;
+      // Lógica para mudar idioma (exemplo)
+      alert(`Idioma selecionado: ${language}`);
+  }
+
+  // Função para ativar/desativar contraste
+  function toggleContrast() {
+      document.body.classList.toggle('high-contrast');
+  }
+
+  // Função para ativar/desativar leitura em voz alta
+  function toggleTalkTouch() {
+      const talkTouchStatus = document.getElementById("talkTouchStatus");
+      const talkTouchEnabled = talkTouchStatus.textContent.includes("Desativado");
+      talkTouchStatus.textContent = talkTouchEnabled ? "TalkTouch: Ativado" : "TalkTouch: Desativado";
+  }
+
+  // Event listener para o filtro de curso
+  if (filtroCurso) {
+      filtroCurso.addEventListener("change", function (event) {
+          const selectedOption = event.target.value;
+          console.log(`Curso selecionado: ${selectedOption}`);
+      });
+  }
+});
