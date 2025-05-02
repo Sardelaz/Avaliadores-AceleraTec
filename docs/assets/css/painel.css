@@ -179,11 +179,9 @@ body {
   box-shadow: 4px 4px 0 #212121;
   width: 80%;
   max-width: 500px;
-  /* Esconde a seta padrão do select */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  /* Adiciona uma seta customizada via SVG */
   background-image: url("data:image/svg+xml;utf8,<svg fill='%23212121' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 1rem center;
@@ -231,6 +229,7 @@ body {
   background-color: #fff8f0;
   border: 5px solid #212121;
   border-radius: 15px;
+  text-align: center;
   padding: 1.5rem;
   box-shadow: 6px 6px 0 #212121;
   font-family: cuphead, "Comic Sans MS", cursive;
@@ -285,7 +284,6 @@ body {
 .btn-avaliar {
   display: inline-block;
   margin-top: 0.5rem;
-  margin-left: 30%;
   padding: 10px 15px;
   background-color: #da6531;
   color: #fff;
