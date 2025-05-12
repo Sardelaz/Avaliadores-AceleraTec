@@ -26,3 +26,5 @@ desktop.ini
 
 # OneDrive (caso gere arquivos de cache)
 *.lnk
+
+docs/js/firebase-config.js
