@@ -5,13 +5,13 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase
 // Este arquivo será processado por build.js para substituir os valores abaixo
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCSJHZqPSsaswjczptvKcJzgfsIgNbZqyg",
-  authDomain: "aceleratec-41568.firebaseapp.com",
-  projectId: "aceleratec-41568",
-  storageBucket: "aceleratec-41568.appspot.com",  
-  messagingSenderId: "568282188545",
-  appId: "1:568282188545:web:a5278f52a2201317242900",
-  measurementId: "G-484WC39M5F",
+  apiKey: "%%APIKEY%%",
+  authDomain: "%%AUTHDOMAIN%%",
+  projectId: "%%PROJECTID%%",
+  storageBucket: "%%STORAGEBUCKET%%",  
+  messagingSenderId: "%%MESSAGINGSENDERID%%",
+  appId: "%%APPID%%",
+  measurementId: "%%MEASUREMENTID%%",
 };
 
 const app = initializeApp(firebaseConfig);

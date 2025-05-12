@@ -6,7 +6,6 @@
 * {
   margin: 0;
   box-sizing: border-box;
-  cursor: none;
 }
 
 body {
@@ -17,7 +16,6 @@ body {
   background-position: center;
   font-family: cuphead, "Comic Sans MS", cursive, sans-serif;
   overflow-x: hidden;
-  cursor: none;
 }
 
 /* Fantasma e rastro (Usado pelo script mouse.js) */

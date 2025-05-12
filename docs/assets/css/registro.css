@@ -6,7 +6,6 @@
 * {
   margin: 0;
   box-sizing: border-box;
-  cursor: none;
 }
 
 body {
@@ -20,7 +19,6 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  cursor: none;
 }
 
 .register-container {

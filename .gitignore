@@ -1,18 +1,28 @@
-# Dependências
+# Node.js
 node_modules/
-
-# Arquivos de ambiente
 .env
-
-# Pasta de build
-/dist/js/firebase
-
-# Arquivos de sistema
 .DS_Store
-Thumbs.db
-
-# Logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Firebase config gerado no build
+/js/firebase-config.js
+
+# Build final
+docs/
+
+# Sistema operacional
+Thumbs.db
+desktop.ini
+
+# VSCode
+.vscode/
+
+# Arquivos temporários
+*.log
+*.tmp
+*.swp
+
+# OneDrive (caso gere arquivos de cache)
+*.lnk

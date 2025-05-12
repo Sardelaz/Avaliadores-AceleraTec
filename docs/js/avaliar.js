@@ -1,62 +1,70 @@
+// Importações do firebase-config.js (assumindo que ele existe)
 import { auth, db } from "./firebase-config.js";
+// Importação do Firebase Auth
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+// Importações do Firebase Firestore
 import {
   doc,
   getDoc,
   collection,
   addDoc,
+  query, // <-- Adicionado
+  where, // <-- Adicionado
+  getDocs, // <-- Adicionado
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// Importe a função para gerar IDs únicos
+// UUID para gerar IDs únicos (ainda necessário para a primeira avaliação)
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
-// Se estiver usando npm/yarn e um empacotador, use:
-// import { v4 as uuidv4 } from 'uuid';
 
 document.addEventListener("DOMContentLoaded", () => {
-  const projetoId = new URLSearchParams(window.location.search).get("id");
-  const projetoContainer = document.getElementById("conteudo-avaliacao");
+  // Obtém o ID do projeto a partir dos parâmetros da URL
+  const projectId = new URLSearchParams(window.location.search).get("id");
+  // Obtém o container para os detalhes do projeto e o formulário de avaliação
+  const projectContent = document.getElementById("conteudo-avaliacao");
 
-  // Variáveis para referências dos elementos dinamicamente criados
-  let comentarioInput = null;
-  let notaInput = null;
-  let enviarAvaliacaoBtn = null;
-  let avaliacaoStatus = null;
-  let secaoAvaliacaoDiv = null; // A div que envolve o formulário de avaliação
+  // Variáveis para armazenar referências aos elementos do formulário
+  let commentInput = null;
+  let scoreInput = null;
+  let sendEvaluationBtn = null;
+  let evaluationStatusElement = null;
+  let evaluationSectionDiv = null;
 
-  let currentUser = null; // Variável para armazenar o usuário logado
+  // Variáveis para armazenar usuário atual e detalhes do projeto
+  let currentUser = null;
+  let projectDetails = null;
 
-  // Função para carregar os detalhes do projeto e renderizar a página
-  const carregarProjeto = async () => {
-    if (!projetoContainer) {
-      console.warn("Elemento '#conteudo-avaliacao' não encontrado.");
-      return;
-    }
+  // Define a URL base da API backend
+  const API_BASE_URL = "http://localhost:3000"; // Ajuste conforme necessário para produção
 
-    if (!projetoId) {
-      console.error("ID do projeto não fornecido na URL.");
-      // Usando <p> simples conforme seu CSS parece sugerir para conteúdo
-      projetoContainer.innerHTML =
-        '<p class="erro">ID do projeto não encontrado.</p>';
+  // Função para carregar os detalhes do projeto do Firestore
+  const loadProject = async () => {
+    if (!projectContent) return;
+
+    if (!projectId) {
+      projectContent.innerHTML =
+        '<p class="error">ID do projeto não encontrado.</p>';
       return;
     }
 
     try {
-      const projetoRef = doc(db, "projetos", projetoId);
-      const projetoDoc = await getDoc(projetoRef);
+      const projectRef = doc(db, "projetos", projectId);
+      const projectDoc = await getDoc(projectRef);
 
-      if (!projetoDoc.exists()) {
-        console.error(`Projeto com ID ${projetoId} não encontrado.`);
-        // Usando <p> simples conforme seu CSS parece sugerir para conteúdo
-        projetoContainer.innerHTML = `<p class="erro">Projeto não encontrado com o ID: ${projetoId}.</p>`;
+      if (!projectDoc.exists()) {
+        projectContent.innerHTML = `<p class="error">Projeto não encontrado com ID: ${projectId}.</p>`;
         return;
       }
 
-      const projeto = projetoDoc.data();
+      const project = projectDoc.data();
 
-      // Formata a data, se existir
-      let dataInscricaoFormatada = "Não informada";
-      if (projeto.dataCriacao && projeto.dataCriacao.toDate) {
-        dataInscricaoFormatada = projeto.dataCriacao
+      projectDetails = {
+        projectName: project.nomeProjeto || "Título não disponível",
+        responsibleEmail: project.emailResponsavel || "Não informado",
+      };
+
+      let formattedEnrollmentDate = "Não informado";
+      if (project.dataCriacao && project.dataCriacao.toDate) {
+        formattedEnrollmentDate = project.dataCriacao
           .toDate()
           .toLocaleDateString("pt-BR", {
             day: "2-digit",
@@ -65,317 +73,243 @@ document.addEventListener("DOMContentLoaded", () => {
           });
       }
 
-      // Cria a string HTML completa, ajustando classes e IDs conforme o CSS
-      const projetoCompletoHTML = `
-                <div class="projeto-detalhes">
-                    <h1>${projeto.nomeProjeto || "Título não disponível"}</h1>
-                    <p><strong>Email de contato:</strong> ${
-                      projeto.emailResponsavel || "Não informado"
-                    }</p>
-                    <p><strong>Jogadores:</strong> ${
-                      projeto.integrantes
-                        ? projeto.integrantes.join(", ")
-                        : "Não informado"
-                    }</p>
-                    <p><strong>Professor(a) Auxiliar:</strong> ${
-                      projeto.professorAuxiliar || "Não informado"
-                    }</p>
-                    <p><strong>Descrição:</strong></p>
-                    <p>${
-                      projeto.descricaoProjeto || "Descrição não disponível"
-                    }</p>
-                    <p><strong>Inscrito em:</strong> ${dataInscricaoFormatada}</p>
-                    <p><strong>Curso/Ano:</strong> ${
-                      projeto.turmaEquipe ||
-                      projeto.cursoAno ||
-                      "Curso/Ano não disponível"
-                    }</p>
-                    <p><strong>Link do Canva:</strong> ${
-                      projeto.linkCanva
-                        ? `<a href="${projeto.linkCanva}" target="_blank">Visualizar</a>`
-                        : "Link do Canva não disponível"
-                    }</p>
-                </div>
+      // Conteúdo HTML permanece o mesmo, pois a lógica de reuso do ID é no JS
+      const projectHTML = `
+        <div class="project-details">
+            <h1>${projectDetails.projectName}</h1>
+            <p><strong>Email de contato:</strong> ${
+              projectDetails.responsibleEmail
+            }</p>
+            <p><strong>Integrantes:</strong> ${
+              project.integrantes
+                ? project.integrantes.join(", ")
+                : "Não informado"
+            }</p>
+            <p><strong>Professor(a) auxiliar:</strong> ${
+              project.professorAuxiliar || "Não informado"
+            }</p>
+            <p><strong>Descrição:</strong></p>
+            <p>${project.descricaoProjeto || "Descrição não disponível"}</p>
+            <p><strong>Inscrito em:</strong> ${formattedEnrollmentDate}</p>
+            <p><strong>Turma/Ano:</strong> ${
+              project.turmaEquipe ||
+              project.cursoAno ||
+              "Turma/Ano não disponível"
+            }</p>
+            <p><strong>Link do Canva:</strong> ${
+              project.linkCanva
+                ? `<a href="${project.linkCanva}" target="_blank">Visualizar</a>`
+                : "Link do Canva não disponível"
+            }</p>
+        </div>
+        <hr>
+        <div id="secao-avaliacao-dinamica">
+            <h2>Sua Avaliação</h2>
+            <div class="form-group">
+                <label for="comentario">Comentário:</label>
+                <textarea id="comentario" class="form-control" placeholder="Comente sobre o projeto (dê feedback slide por slide e sugestões de correções)" rows="10"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="nota">Nota (1 a 10):</label>
+                <select id="nota" class="form-control" required>
+                    <option value="">Selecione uma nota</option>
+                    ${Array.from({ length: 10 }, (_, i) => i + 1)
+                      .map((num) => `<option value="${num}">${num}</option>`)
+                      .join("")}
+                </select>
+            </div>
+            <button id="enviarAvaliacao">Enviar Avaliação</button>
+            <p id="avaliacao-status"></p>
+        </div>
+      `;
 
-                <hr>
+      projectContent.innerHTML = projectHTML;
 
-                <div id="secao-avaliacao-dinamica">
-                    <h2>Sua Avaliação</h2>
-
-                    <div class="form-group">
-                        <label for="comentario">Comentário:</label>
-                        <textarea id="comentario" class="form-control" placeholder="Comentário sobre o projeto (escreva um feedback para cada slide e sugira correções)" rows="10" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="nota">Nota (1-10):</label>
-                        <select id="nota" class="form-control" required>
-                            <option value="">Selecione uma nota</option>
-                            ${Array.from({ length: 10 }, (_, i) => i + 1)
-                              .map(
-                                (num) =>
-                                  `<option value="${num}">${num}</option>`
-                              )
-                              .join("")}
-                        </select>
-                    </div>
-
-                    <button id="enviarAvaliacao">Enviar Avaliação</button>
-                    <p id="avaliacao-status"></p>
-                </div>
-            `;
-
-      // Define o innerHTML do container com todo o conteúdo gerado
-      projetoContainer.innerHTML = projetoCompletoHTML;
-
-      // === IMPORTANTE: Pegar as referências dos elementos AGORA que eles existem ===
-      // Use querySelector dentro do container para garantir que pega os elementos dinâmicos
-      secaoAvaliacaoDiv = projetoContainer.querySelector(
+      // Re-obter referências após atualizar innerHTML
+      evaluationSectionDiv = projectContent.querySelector(
         "#secao-avaliacao-dinamica"
       );
-      comentarioInput = projetoContainer.querySelector("#comentario");
-      notaInput = projetoContainer.querySelector("#nota");
-      enviarAvaliacaoBtn = projetoContainer.querySelector("#enviarAvaliacao");
-      avaliacaoStatus = projetoContainer.querySelector("#avaliacao-status");
+      commentInput = projectContent.querySelector("#comentario");
+      scoreInput = projectContent.querySelector("#nota");
+      sendEvaluationBtn = projectContent.querySelector("#enviarAvaliacao");
+      evaluationStatusElement =
+        projectContent.querySelector("#avaliacao-status");
 
-      // === Configurar o listener do botão AGORA que ele existe ===
-      if (enviarAvaliacaoBtn) {
-        enviarAvaliacaoBtn.addEventListener("click", async () => {
-          // Desabilita o botão para evitar múltiplos cliques
-          enviarAvaliacaoBtn.disabled = true;
-          if (avaliacaoStatus) avaliacaoStatus.textContent = "Enviando...";
-          // Não há classe específica para cor de status no CSS fornecido, mantendo estilo inline
-          if (avaliacaoStatus) avaliacaoStatus.style.color = "blue";
+      if (sendEvaluationBtn) {
+        sendEvaluationBtn.addEventListener("click", async () => {
+          sendEvaluationBtn.disabled = true;
+          if (evaluationStatusElement) {
+            evaluationStatusElement.textContent = "Enviando...";
+            evaluationStatusElement.style.color = "blue";
+          }
 
           if (!currentUser) {
-            if (avaliacaoStatus) {
-              avaliacaoStatus.textContent =
+            if (evaluationStatusElement) {
+              evaluationStatusElement.textContent =
                 "Você precisa estar logado para avaliar.";
-              avaliacaoStatus.style.color = "red";
+              evaluationStatusElement.style.color = "red";
             }
-            enviarAvaliacaoBtn.disabled = false; // Reabilita o botão
+            sendEvaluationBtn.disabled = false;
             return;
           }
 
-          const comentario = comentarioInput.value.trim();
-          const nota = parseInt(notaInput.value, 10);
+          const comment = commentInput.value.trim();
+          const score = parseInt(scoreInput.value, 10);
 
-          if (!projetoId) {
-            if (avaliacaoStatus) {
-              avaliacaoStatus.textContent =
-                "Erro: ID do projeto não encontrado.";
-              avaliacaoStatus.style.color = "red";
+          if (!projectId) {
+            if (evaluationStatusElement) {
+              evaluationStatusElement.textContent =
+                "Erro: ID do projeto não encontrado para enviar avaliação.";
+              evaluationStatusElement.style.color = "red";
             }
-            enviarAvaliacaoBtn.disabled = false;
+            sendEvaluationBtn.disabled = false;
             return;
           }
 
-          // Validação: pelo menos um comentário NÃO VAZIO e/ou uma nota válida
-          if (comentario === "" && (isNaN(nota) || nota < 1 || nota > 10)) {
-            if (avaliacaoStatus) {
-              avaliacaoStatus.textContent =
-                "Por favor, adicione um comentário e/ou selecione uma nota válida.";
-              avaliacaoStatus.style.color = "red";
+          const isCommentValid = comment !== "";
+          const isScoreValid = !isNaN(score) && score >= 1 && score <= 10;
+
+          if (!isCommentValid && !isScoreValid) {
+            if (evaluationStatusElement) {
+              evaluationStatusElement.textContent =
+                "Adicione um comentário e/ou selecione uma nota válida (1 a 10).";
+              evaluationStatusElement.style.color = "red";
             }
-            enviarAvaliacaoBtn.disabled = false;
+            sendEvaluationBtn.disabled = false;
             return;
           }
 
-          // Validação específica da nota
-          if (isNaN(nota) || nota < 1 || nota > 10) {
-            if (avaliacaoStatus) {
-              avaliacaoStatus.textContent =
-                "Por favor, selecione uma nota válida entre 1 e 10.";
-              avaliacaoStatus.style.color = "red";
+          // --- Lógica para verificar e reutilizar o accessProjectId existente ---
+          let accessProjectId;
+          try {
+            const evaluationsRef = collection(db, "avaliacoes");
+            const q = query(
+              evaluationsRef,
+              where("projectId", "==", projectId),
+              where("evaluatorId", "==", currentUser.uid)
+            );
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+              // Já existe uma avaliação deste avaliador para este projeto
+              // Pega o accessProjectId da primeira avaliação encontrada
+              accessProjectId = querySnapshot.docs[0].data().accessProjectId;
+              console.log(
+                "Reutilizando accessProjectId existente:",
+                accessProjectId
+              );
+            } else {
+              // Primeira avaliação deste avaliador para este projeto
+              accessProjectId = uuidv4(); // Gera um novo ID
+              console.log("Gerando novo accessProjectId:", accessProjectId);
             }
-            enviarAvaliacaoBtn.disabled = false;
-            return;
+          } catch (error) {
+            console.error("Erro ao verificar avaliações existentes:", error);
+            // Em caso de erro na consulta, podemos optar por gerar um novo ID
+            // ou parar o processo. Gerar um novo ID é mais seguro para não travar.
+            accessProjectId = uuidv4();
+            if (evaluationStatusElement) {
+              evaluationStatusElement.textContent =
+                "Aviso: Não foi possível verificar avaliações anteriores. Gerando novo código de acesso.";
+              evaluationStatusElement.style.color = "orange";
+            }
+            console.warn(
+              "Continuando com novo accessProjectId devido a erro na consulta."
+            );
           }
+          // --- Fim da lógica de verificação e reutilização ---
 
-          // Gere um ID de acesso único para edição
-          const acessoProjetoId = uuidv4();
-
-          const avaliacaoData = {
-            projetoId: projetoId,
-            avaliadorId: currentUser.uid,
-            comentario: comentario,
-            nota: nota,
+          const evaluationData = {
+            projectId: projectId,
+            evaluatorId: currentUser.uid,
+            comment: comment,
+            score: isScoreValid ? score : null,
             timestamp: new Date(),
-            acessoProjetoId: acessoProjetoId, // Inclua o ID de acesso no documento de avaliação
+            accessProjectId: accessProjectId, // Usando o ID determinado acima
           };
 
           try {
-            // 1. Salva a avaliação no Firestore
-            await addDoc(collection(db, "avaliacoes"), avaliacaoData);
+            // Adiciona a nova avaliação (mesmo que seja uma reavaliação,
+            // queremos registrar o novo feedback, apenas o código de acesso é o mesmo)
+            await addDoc(collection(db, "avaliacoes"), evaluationData);
 
-            // 2. Obtém o email do responsável pelo projeto novamente
-            const projetoDoc = await getDoc(doc(db, "projetos", projetoId));
-            const projeto = projetoDoc.data();
-            const emailResponsavel = projeto.emailResponsavel;
+            const responsibleEmail = projectDetails.responsibleEmail;
+            const projectName = projectDetails.projectName;
 
-            // 3. Envia requisição para o backend enviar o email (SE o email do responsável existir)
+            // Envio de e-mail permanece o mesmo, usando o accessProjectId (reutilizado ou novo)
             if (
-              emailResponsavel &&
-              typeof emailResponsavel === "string" &&
-              emailResponsavel.trim() !== "" &&
-              emailResponsavel !== "Não informado"
+              responsibleEmail &&
+              typeof responsibleEmail === "string" &&
+              responsibleEmail.trim() !== "" &&
+              responsibleEmail !== "Não informado"
             ) {
-              // Use window.location.origin para pegar a base da URL atual
-              // SUBSTITUA '/pagina-edicao-projeto.html' pela URL real da sua página de edição
-              const linkEdicao = `${window.location.origin}/pagina-edicao-projeto.html?projetoId=${projetoId}&acessoId=${acessoProjetoId}`;
+              const emailSubject = `Nova avaliação recebida para o projeto: "${projectName}"`;
 
-              const emailSubject = `Avaliação recebida para o projeto: "${
-                projeto.nomeProjeto || "Seu Projeto"
-              }"`;
-              const emailText = `Olá,\n\nSeu projeto "${
-                projeto.nomeProjeto || "Nome do Projeto"
-              }" recebeu uma nova avaliação.\n\nVocê pode visualizar e editar seu projeto através deste link:\n${linkEdicao}\n\nPor favor, não compartilhe este link de acesso.`;
+              const emailText = `Olá,
+
+Seu projeto "${projectName}" recebeu uma nova avaliação.
+
+${isCommentValid ? `Comentário do avaliador:\n${comment}\n` : ""}
+${isScoreValid ? `Nota atribuída: ${score}/10\n` : ""}
+
+Para visualizar o feedback completo e editar seu projeto, use o código de acesso abaixo:
+
+Código de Acesso: ${accessProjectId}
+
+Por favor, não compartilhe esse código. Ele permite editar o projeto.`;
 
               const emailParams = {
-                to: emailResponsavel,
+                to: responsibleEmail,
                 subject: emailSubject,
                 text: emailText,
               };
 
-              try {
-                // === AJUSTE AQUI: Apontando para o backend local ===
-                // SUBSTITUA 'http://localhost:3000/api/send-email' pelo caminho correto do seu endpoint
-                // Quando for para produção, mude para a URL pública do seu backend
-                const response = await fetch(
-                  "http://localhost:3000/api/send-email",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(emailParams),
-                  }
-                );
-
-                const responseData = await response.json();
-
-                if (response.ok && responseData.success) {
-                  if (avaliacaoStatus) {
-                    avaliacaoStatus.textContent =
-                      "Avaliação enviada com sucesso! Um email com o link de edição foi enviado ao responsável.";
-                    avaliacaoStatus.style.color = "green";
-                  }
-                } else {
-                  console.error(
-                    "Erro no backend ao enviar email:",
-                    responseData.error
-                  );
-                  if (avaliacaoStatus) {
-                    avaliacaoStatus.textContent = `Avaliação enviada, mas houve um erro ao enviar o email (${
-                      response.status
-                    }): ${
-                      responseData.error || "Erro desconhecido no backend"
-                    }`;
-                    avaliacaoStatus.style.color = "orange";
-                  }
-                }
-              } catch (emailError) {
-                console.error(
-                  "Erro na requisição fetch para enviar email:",
-                  emailError
-                );
-                if (avaliacaoStatus) {
-                  avaliacaoStatus.textContent = `Avaliação enviada, mas houve um erro de comunicação ao tentar enviar o email: ${emailError.message}`;
-                  avaliacaoStatus.style.color = "orange";
-                }
-              }
-            } else {
-              // Caso não haja email do responsável
-              if (avaliacaoStatus) {
-                avaliacaoStatus.textContent =
-                  "Avaliação enviada com sucesso, mas o email do responsável não foi informado, então o link de edição não pôde ser enviado.";
-                avaliacaoStatus.style.color = "orange";
-              }
+              await fetch(`${API_BASE_URL}/api/send-email`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(emailParams),
+              });
             }
 
-            // Limpar os campos após enviar
-            if (comentarioInput) comentarioInput.value = "";
-            if (notaInput) notaInput.value = ""; // Limpa o select (volta para a opção padrão se houver)
+            if (evaluationStatusElement) {
+              evaluationStatusElement.textContent =
+                "Avaliação enviada com sucesso! O responsável foi notificado por e-mail.";
+              evaluationStatusElement.style.color = "green";
+            }
+            // Não desabilite o botão permanentemente se quiser permitir reavaliações rápidas,
+            // mas é comum desabilitar após um envio bem-sucedido para evitar envios duplicados.
+            // sendEvaluationBtn.disabled = true; // Mantido desabilitado como no original
           } catch (error) {
-            console.error("Erro ao salvar avaliação no Firestore:", error);
-            if (avaliacaoStatus) {
-              avaliacaoStatus.textContent = `Erro ao enviar avaliação: ${error.message}`;
-              avaliacaoStatus.style.color = "red";
+            console.error("Erro ao enviar avaliação:", error);
+            if (evaluationStatusElement) {
+              evaluationStatusElement.textContent =
+                "Erro ao enviar a avaliação. Tente novamente.";
+              evaluationStatusElement.style.color = "red";
             }
-          } finally {
-            // Reabilita o botão após o processo (sucesso ou falha)
-            enviarAvaliacaoBtn.disabled = false;
+            sendEvaluationBtn.disabled = false;
           }
         });
-      } else {
-        console.warn(
-          "Botão 'enviarAvaliacao' não encontrado após innerHTML. Verifique o ID no HTML gerado."
-        );
-      }
-
-      // Controla a visibilidade da seção de avaliação com base no estado de login
-      // Esta lógica é aplicada APÓS a renderização inicial em carregarProjeto
-      if (secaoAvaliacaoDiv) {
-        secaoAvaliacaoDiv.style.display = currentUser ? "block" : "none";
-        if (!currentUser && avaliacaoStatus) {
-          avaliacaoStatus.textContent = "Faça login para enviar sua avaliação.";
-          avaliacaoStatus.style.color = "orange";
-        } else if (currentUser && avaliacaoStatus) {
-          avaliacaoStatus.textContent = ""; // Limpa a mensagem de login se logado
-        }
       }
     } catch (error) {
-      console.error("Erro fatal ao carregar o projeto:", error);
-      if (projetoContainer) {
-        // Usando <p> simples conforme seu CSS parece sugerir para conteúdo
-        projetoContainer.innerHTML =
-          '<p class="erro">Erro ao carregar o projeto. Tente novamente.</p>';
-      }
-      // Garante que a seção de avaliação dinâmica não apareça se houver erro no carregamento
-      if (secaoAvaliacaoDiv) {
-        secaoAvaliacaoDiv.style.display = "none";
-      }
+      console.error("Erro ao carregar os detalhes do projeto:", error);
+      projectContent.innerHTML =
+        '<p class="error">Erro ao carregar os detalhes do projeto.</p>';
     }
   };
 
-  // Inicia o carregamento do projeto se o ID estiver na URL
-  if (projetoId) {
-    carregarProjeto();
-  } else {
-    if (projetoContainer) {
-      // Usando <p> simples conforme seu CSS parece sugerir para conteúdo
-      projetoContainer.innerHTML =
-        '<p class="erro">Nenhum ID de projeto especificado. Não é possível carregar para avaliação.</p>';
-    }
-  }
-
-  // Monitora o estado de autenticação para controlar a visibilidade da seção de avaliação
-  // e garantir que currentUser esteja sempre atualizado.
+  // Verifica o estado de autenticação do usuário
   onAuthStateChanged(auth, (user) => {
-    console.log(
-      "Estado do usuário:",
-      user ? `Logado: ${user.uid}` : "Deslogado"
-    );
-    currentUser = user; // Atualiza a variável do usuário logado
-
-    // Se a seção de avaliação já foi renderizada (ou seja, secaoAvaliacaoDiv não é null),
-    // ajusta sua visibilidade com base no estado de login.
-    // Se ainda não foi renderizada, carregarProjeto lidará com a visibilidade inicial.
-    if (secaoAvaliacaoDiv) {
-      secaoAvaliacaoDiv.style.display = currentUser ? "block" : "none";
-      if (!currentUser && avaliacaoStatus) {
-        avaliacaoStatus.textContent = "Faça login para enviar sua avaliação.";
-        avaliacaoStatus.style.color = "orange";
-      } else if (currentUser && avaliacaoStatus) {
-        // A mensagem de status é limpa ao logar, a menos que haja um erro de projeto
-        // ou uma mensagem de envio pendente. Deixe carregarProjeto ou o listener de envio
-        // definir a mensagem principal.
-        if (
-          avaliacaoStatus.textContent ===
-          "Faça login para enviar sua avaliação."
-        ) {
-          avaliacaoStatus.textContent = "";
-        }
+    if (user) {
+      currentUser = user;
+      loadProject(); // Carrega o projeto apenas se o usuário estiver logado
+    } else {
+      currentUser = null;
+      // Limpa o conteúdo e mostra mensagem de login se não houver usuário
+      if (projectContent) {
+        projectContent.innerHTML =
+          '<p class="error">Você precisa estar logado para acessar este projeto.</p>';
       }
     }
   });
