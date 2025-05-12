@@ -1,6 +1,6 @@
 // js/login.js
 import { login, mostrarErro } from "./firebase.js";
-import { auth } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {

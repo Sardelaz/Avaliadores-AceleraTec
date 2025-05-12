@@ -1,5 +1,5 @@
 // Importações do firebase-config.js (assumindo que ele existe)
-import { auth, db } from "./firebase-config.js";
+import { auth, db } from  "./firebase-config.js";
 // Importação do Firebase Auth
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 // Importações do Firebase Firestore
